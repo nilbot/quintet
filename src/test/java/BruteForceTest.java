@@ -1,17 +1,44 @@
-import model.AllocationResult;
-import model.RandomTestGenerator;
+import app.Config;
+import logic.Solver;
+import model.DataSource;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import presentation.Result;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import static java.lang.Thread.sleep;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * test cases
  */
 public class BruteForceTest {
+    private Solver bruteForce;
+    private DataSource data;
+    private Config testConfig;
+
+    public void setup() throws Exception{
+        testConfig = new Config();
+        testConfig.GetConfig();
+        data = testConfig.GetData();
+        bruteForce = testConfig.GetSolver();
+        try {
+            sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        bruteForce.InjectData(data);
+    }
+
+    @Test
+    public void testFileExists() throws Exception {
+        Path path = Paths.get("mini.tsv");
+        assert(path!=null);
+    }
+
 
     @Test
     public void testPermute() throws Exception {
@@ -30,17 +57,16 @@ public class BruteForceTest {
 
     @Test
     public void testDryRun() throws Exception {
-        long begin = System.currentTimeMillis();
-        RandomTestGenerator generatedTests = new RandomTestGenerator(8,5,3);
-        System.out.printf("Test generation cost %d ms \n",System.currentTimeMillis() - begin);
-        Object[] a = generatedTests.Repo.keySet().toArray();
-        begin = System.currentTimeMillis();
-        ArrayList<ArrayList<Integer>> rst = BruteForce.permute(Arrays.copyOf(a, a.length, Integer[].class));
-        System.out.printf("Permute all possible arrangements cost %d ms \n\n----\n", System.currentTimeMillis() - begin);
+//        long begin = System.currentTimeMillis();
+//        System.out.printf("Test generation cost %d ms \n",System.currentTimeMillis() - begin);
 
-        begin = System.currentTimeMillis();
-        AllocationResult result = BruteForce.minCost(rst, generatedTests.Students);
-        System.out.println("Result of best arrangement: " + result.toString());
+        setup();
+        long begin = System.currentTimeMillis();
+
+        Result res = bruteForce.Solve();
+
+        System.out.printf("Permute all possible arrangements cost %d ms \n\n----\n", System.currentTimeMillis() - begin);
+        System.out.println("Result of best arrangement: " + res);
         System.out.printf("min cost %d ms", System.currentTimeMillis() - begin);
     }
 }
