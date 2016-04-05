@@ -5,7 +5,7 @@ import data.TSVReader;
 import logic.BruteForce;
 import logic.Solver;
 import model.DataSource;
-import model.InMemoryRepo;
+import data.InMemoryRepo;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
