@@ -1,4 +1,9 @@
-package model;
+package data;
+
+import model.DataSource;
+import model.Dodgy;
+import model.Project;
+import model.Student;
 
 import java.util.*;
 
@@ -7,8 +12,8 @@ import static model.service.UtilityService.*;
 /**
  * InMemoryRepo:
  */
-public class InMemoryRepo implements DataSource, Dodgy{
-    private Map<String,Student> studentRepo;
+public class InMemoryRepo implements DataSource, Dodgy {
+    private Map<String, Student> studentRepo;
     private Set<Project> projectRepo;
     private boolean ready;
 
