@@ -3,6 +3,7 @@ package app;
 import config.*;
 import data.TSVReader;
 import logic.BruteForce;
+import logic.GeneticAlgorithm;
 import logic.Solver;
 import model.DataSource;
 import data.InMemoryRepo;
@@ -71,6 +72,7 @@ public class Config {
                 return getBruteForce();
             case SimulatedAnnealing:
             case GeneticAlgorithm:
+                return getGeneticAlgorithm();
             default:
                 throw new UnsupportedOperationException("Not implemented");
         }
@@ -91,4 +93,5 @@ public class Config {
     private Solver getBruteForce() {
         return new BruteForce();
     }
+    private Solver getGeneticAlgorithm() { return new GeneticAlgorithm(); }
 }
