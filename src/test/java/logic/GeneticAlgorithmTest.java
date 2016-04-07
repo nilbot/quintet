@@ -1,3 +1,5 @@
+package logic;
+
 import app.Config;
 import logic.Solver;
 import model.DataSource;
