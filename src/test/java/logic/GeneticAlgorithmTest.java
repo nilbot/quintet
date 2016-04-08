@@ -39,6 +39,7 @@ public class GeneticAlgorithmTest {
 
         Result res = genetic.Solve();
 
+        System.out.println();
         System.out.println("Time to solve: " + (System.currentTimeMillis() - begin));
         System.out.println("Result of best arrangement: " + res);
     }

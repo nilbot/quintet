@@ -1,19 +1,20 @@
 package logic;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import model.DataSource;
 import model.Project;
 import model.Student;
 import presentation.Result;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GeneticAlgorithm implements Solver {
     private Map<Integer,Project>  projectPermute;
     private Map<Integer,Student> studentPermute;
     private Map<String,Student> studentPool;
+    List<Student> casualties = new ArrayList<>();
+    List<Student> survivors = new ArrayList<>();
 
     public GeneticAlgorithm(){
         this.projectPermute = new HashMap<>();
@@ -21,56 +22,53 @@ public class GeneticAlgorithm implements Solver {
         this.studentPool = new HashMap<>();
     }
 
-    // allocate projects to student, the index of students are fix, ofc you can
-    // reverse the relation and build backwards
-    private int
-    cost(List<Integer> allocation, List<Student> students) {
-        /*
-        if (allocation == null || allocation.size() == 0) {
-            return Integer.MAX_VALUE;
+    // the strongest members of a population are more likely to survive, by
+    // virtue of their fitness. however! it is not certain. even the weakest
+    // members of a population have a tiny chance that they will survive.
+    // conversely, a healthy specimen close to max fitness can sometimes die,
+    // and less fit specimens can sometimes live and breed.
+    //
+    // calculating fitness (and culling) can be done with:
+    //   - a priority queue + comparator, then culling the lowest ordered (or
+    //   other variations on this theme)
+    //   - a specific fitness function that returns the relative fitness of
+    //   a student against the rest of the other objects in the set. if the
+    //   student is not fit enough, they are dropped from the collection
+    private List<Student> cull(List<Student> students) {
+        int survivalChance = 0;
+
+        // create a student comparator to act as a temporary fitness function
+        Comparator<Student> comparator = new FitnessComparator();
+
+        // create a priority queue to hold a collection of sorted students
+        PriorityQueue<Student> orderedStudents = new PriorityQueue<>(students.size(), comparator);
+
+        // add all students to the priority queue
+        for (Student s : students) {
+            orderedStudents.add(s);
         }
-        int score = 0;
+
+        // strategy 0:
+        // cull students based on their order in the priority queue
         for (int i = 0; i < students.size(); i++) {
-            // WORKAROUND, ROOT CAUSE NOT FOUND (HAD AN IDEA, TOO SLEEPY)
-            Project p = projectPermute.get(i);
-            if (p == null) {
-                p = new Project("NON EXISTS");
-            }
-            score += students.get(i).getRanking(p);
-        }
-        return score;
-        */
-        return 0;
-    }
+            Student curr = orderedStudents.poll();
+            survivalChance = (100 / students.size()) * i;
 
-    // the strongest members of a CandidateSolution population are more
-    // likely to survive - but it is not certain. the decision is based
-    // on statistics. even the weakest members of a population have a tiny
-    // chance that they will survive
-    // TODO: discuss below points
-    // - in the wild a healthy specimen (in our case, a candidate solution
-    // close to MAX_FITNESS) can sometimes die, and an unhealthy
-    // specimen can sometimes live
-    private void cull() {
-        /*
-        public List<CandidateSolution> cull() {
-
-            for each CandidateSolution c
-                    fitness = c.getFitness()
-            if fitness != MAX_FITNESS {
-                chanceOfSurvival = fitness / MAX_FITNESS
-                rand = Math.rand()
-                if math.Rand() > chanceOfSurvival {
-                    list.remove(c)
-                }
+            // only keep the top 80% of student solutions
+            if (survivalChance > 20) {
+                survivors.add(curr);
+            } else {
+                casualties.add(curr);
             }
         }
-        */
 
-        // just messing around
-        for (Map.Entry<Integer, Project> e : projectPermute.entrySet()) {
-            System.out.println(e.getKey().toString() + e.getValue());
-        }
+        // strategy 1:
+        // cull students based on a fitness function - not implemented!
+        // note: an iterator returned from a priority queue does not guarantee
+        // ordered traversal!
+        Iterator<Student> it = orderedStudents.iterator();
+
+        return survivors;
     }
 
     @Override
@@ -96,46 +94,51 @@ public class GeneticAlgorithm implements Solver {
         }
     }
 
-    // make a simple permute
-    public ArrayList<ArrayList<Integer>>
-    permute(Integer[] projects, Integer limit) {
-        /*
-        ArrayList<ArrayList<Integer>> rst = new ArrayList<>();
-        if (projects == null || projects.length == 0) {
-            return rst;
-        }
-        ArrayList<Integer> list = new ArrayList<>();
-        helper(rst, list, projects, limit);
-        return rst;
-        */
-        return new ArrayList<>();
-    }
-
-    private void
-    helper(ArrayList<ArrayList<Integer>> rst,
-           ArrayList<Integer> list,
-           Integer[] projectIds, Integer limit) {
-        /*
-        if (list.size() == limit) {
-            rst.add(new ArrayList<>(list));
-            return;
-        }
-
-        for (int i = 0; i < projectIds.length; i++) {
-            if (list.contains(projectIds[i])) {
-                continue;
-            }
-            list.add(projectIds[i]);
-            helper(rst, list, projectIds, limit);
-            list.remove(list.size() - 1);
-        }
-        */
-
-    }
-
     @Override
     public Result Solve() {
-        cull();
+        // blatantly using Nil's code
+        int poolSize = studentPool.size();
+        int pondSize = projectPermute.size();
+        List<Student> students = new ArrayList<>();
+
+        for (int i = 0; i < poolSize; i++) {
+            students.add(new ArrayList<>(studentPool.values()).get(i));
+        }
+
+        Set<Integer> projects = projectPermute.keySet();
+        cull(students);
+
+        // there is no presentation class for genetic algorithmss yet,
+        // so I can't return a proper result
+        System.out.println("=========================");
+        System.out.println("Battle report - Survivors");
+        System.out.println("=========================");
+        for (Student s: survivors) {
+            System.out.println(s.getStudentName());
+        }
+        System.out.println("==========================");
+        System.out.println("Battle report - Casualties");
+        System.out.println("==========================");
+        for (Student s: casualties) {
+            System.out.println(s.getStudentName());
+        }
+
         return null;
+    }
+}
+
+class FitnessComparator implements Comparator<Student> {
+    // the fitness function atm is totally useless and doesn't return any
+    // sensible fitness rating, but I just need the comparator to return
+    // *some* value, so, currently, the more preferences a student has,
+    // the higher their fitness! :)
+    public int compare(Student x, Student y) {
+        if (x.getNumberOfPreferences() < y.getNumberOfPreferences()) {
+            return -1;
+        }
+        if (x.getNumberOfPreferences() > y.getNumberOfPreferences()) {
+            return 1;
+        }
+        return 0;
     }
 }
