@@ -19,22 +19,27 @@ public class ImprovableCandidateSolution extends CandidateSolution {
     }
 
 
-    public int improve() {
-        //TODO TEMP VAR await for refactor
-        double threshold = 0.3;
-        double incrementalImprovement = 0.0;
-//        ImprovableCandidateSolution backup = backup();
-        while (incrementalImprovement < threshold) {
+    public boolean improve() {
+//        double threshold = 0.3;
+//        double incrementalImprovement = 0.0;
+        long curr = System.currentTimeMillis();
+        long due = curr + 2000;
+        while (curr <= due) {
             CandidateAssignment labrat = getRandomAssignment();
             int previous = getEnergy();
             labrat.randomizeAssignment();
             if (getEnergy() < previous) {
-                incrementalImprovement += 0.1;
+//                incrementalImprovement += 0.1;
+                return true;
             } else {
                 labrat.undoChange();
             }
+//            if (incrementalImprovement >= 0.3) {
+//                return true;
+//            }
+            curr = System.currentTimeMillis();
         }
 
-        return this.getFitness();
+        return false;
     }
 }
