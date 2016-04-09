@@ -1,5 +1,6 @@
 package logic;
 
+import data.InMemoryRepo;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import model.DataSource;
@@ -10,16 +11,48 @@ import presentation.Result;
 import java.util.*;
 
 public class GeneticAlgorithm implements Solver {
-    private Map<Integer,Project>  projectPermute;
-    private Map<Integer,Student> studentPermute;
-    private Map<String,Student> studentPool;
-    List<Student> casualties = new ArrayList<>();
-    List<Student> survivors = new ArrayList<>();
+    private List<List<Student>> population;
+    private Map<Integer,Project>  projects;
+    private InMemoryRepo repo;
+    private Map<Integer,Student> students;
+    private Map<String,Student> studentRepo;
+    private static int MAX_POPULATION = 10;
 
     public GeneticAlgorithm(){
-        this.projectPermute = new HashMap<>();
-        this.studentPermute = new HashMap<>();
-        this.studentPool = new HashMap<>();
+        this.population = new ArrayList<>();
+        this.projects = new HashMap<>();
+        this.students = new HashMap<>();
+        this.studentRepo = new HashMap<>();
+    }
+
+    // create an initial population consisting of random solutions
+    private void createInitialPopulation() {
+        for (int i = 0; i < MAX_POPULATION; i++) {
+            List<Student> rand = createRandomSolution();
+            this.population.add(rand);
+        }
+    }
+
+    private List<Student> createRandomSolution() {
+        List<Student> randomSolution = new ArrayList<>();
+        Set<Integer> studentKeySet = students.keySet();
+
+        for (Integer k : studentKeySet) {
+            randomSolution.add(createRandomAssignment(students.get(k)));
+        }
+        return randomSolution;
+    }
+
+    private Student createRandomAssignment(Student s) {
+        Project randomPref;
+
+        while (s.getNumberOfPreferences() < s.getNumberOfStatedPreferences()) {
+            randomPref = this.repo.getRandomPreference();
+            if (!s.hasPreference(randomPref)) {
+                s.addProject(randomPref);
+            }
+        }
+        return s;
     }
 
     // the strongest members of a population are more likely to survive, by
@@ -34,27 +67,30 @@ public class GeneticAlgorithm implements Solver {
     //   - a specific fitness function that returns the relative fitness of
     //   a student against the rest of the other objects in the set. if the
     //   student is not fit enough, they are dropped from the collection
-    private List<Student> cull(List<Student> students) {
+    private List<List<Student>> cull(List<List<Student>> population) {
+        List<List<Student>> casualties = new ArrayList<>();
+        List<List<Student>> survivors = new ArrayList<>();
+
         int survivalChance = 0;
 
         // create a student comparator to act as a temporary fitness function
-        Comparator<Student> comparator = new FitnessComparator();
+        Comparator<List<Student>> comparator = new FitnessComparator();
 
-        // create a priority queue to hold a collection of sorted students
-        PriorityQueue<Student> orderedStudents = new PriorityQueue<>(students.size(), comparator);
+        // create a priority queue to hold a collection of sorted solutions
+        PriorityQueue<List<Student>> orderedSolutions = new PriorityQueue<>(MAX_POPULATION, comparator);
 
-        // add all students to the priority queue
-        for (Student s : students) {
-            orderedStudents.add(s);
+        // add all solutions to the priority queue, in preparation for being ranked
+        for (List <Student> l : population) {
+                orderedSolutions.add(l);
         }
 
         // strategy 0:
-        // cull students based on their order in the priority queue
-        for (int i = 0; i < students.size(); i++) {
-            Student curr = orderedStudents.poll();
-            survivalChance = (100 / students.size()) * i;
+        // cull solutions based on their order in the priority queue
+        for (int i = 0; i < MAX_POPULATION; i++) {
+            List<Student> curr = orderedSolutions.poll();
+            survivalChance = (100 / MAX_POPULATION) * i;
 
-            // only keep the top 80% of student solutions
+            // cull the bottom 20% of student solutions
             if (survivalChance > 20) {
                 survivors.add(curr);
             } else {
@@ -66,28 +102,39 @@ public class GeneticAlgorithm implements Solver {
         // cull students based on a fitness function - not implemented!
         // note: an iterator returned from a priority queue does not guarantee
         // ordered traversal!
-        Iterator<Student> it = orderedStudents.iterator();
+        // Iterator<List<Student>> it = population.iterator();
 
         return survivors;
     }
 
+    // GA has it's own fitness function
+    private int fitness(List<Student> solution) {
+        return (int) Math.floor(Math.random()) * 100;
+
+        // fitness function given in Tony's slides
+        // fitness(TeamT) = ∑merit(PlayerT) - |∑cost(PlayerT) - 30|
+        //                  ---------------------------------------
+        //                              ∑cost(PlayerT)
+    }
+
     @Override
     public void InjectData(DataSource repo) {
-        this.projectPermute.clear();
-        this.studentPermute.clear();
-        this.studentPool.clear();
+        this.projects.clear();
+        this.students.clear();
+        this.studentRepo.clear();
         int idx = 0;
 
         try {
             for (Project p : repo.ProjectRepo()) {
-                projectPermute.put(idx++,p);
+                projects.put(idx++,p);
             }
 
-            studentPool = repo.StudentRepo();
+            this.repo = (InMemoryRepo) repo;
+            studentRepo = repo.StudentRepo();
 
             idx = 0;
             for (Student s : repo.StudentRepo().values()) {
-                studentPermute.put(idx++,s);
+                students.put(idx++,s);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,48 +144,31 @@ public class GeneticAlgorithm implements Solver {
     @Override
     public Result Solve() {
         // blatantly using Nil's code
-        int poolSize = studentPool.size();
-        int pondSize = projectPermute.size();
+        int poolSize = students.size();
+        int pondSize = projects.size();
         List<Student> students = new ArrayList<>();
 
         for (int i = 0; i < poolSize; i++) {
-            students.add(new ArrayList<>(studentPool.values()).get(i));
+            students.add(new ArrayList<>(studentRepo.values()).get(i));
         }
 
-        Set<Integer> projects = projectPermute.keySet();
-        cull(students);
+        createInitialPopulation();
+        List<List<Student>> survivors = cull(this.population);
 
         // there is no presentation class for genetic algorithmss yet,
         // so I can't return a proper result
-        System.out.println("=========================");
-        System.out.println("Battle report - Survivors");
-        System.out.println("=========================");
-        for (Student s: survivors) {
-            System.out.println(s.getStudentName());
+        // ... but I will triumph and create one!... after I do chores
+        System.out.println("====================================");
+        System.out.println("Battle report - Surviving solutions");
+        System.out.println("====================================");
+        for (List l: survivors) {
+            System.out.println(l.getClass());
         }
-        System.out.println("==========================");
-        System.out.println("Battle report - Casualties");
-        System.out.println("==========================");
-        for (Student s: casualties) {
-            System.out.println(s.getStudentName());
-        }
+        System.out.println("==========================================");
+        System.out.println("Battle report - Number of culled solutions");
+        System.out.println("==========================================");
+        System.out.println(population.size() - survivors.size());
 
         return null;
-    }
-}
-
-class FitnessComparator implements Comparator<Student> {
-    // the fitness function atm is totally useless and doesn't return any
-    // sensible fitness rating, but I just need the comparator to return
-    // *some* value, so, currently, the more preferences a student has,
-    // the higher their fitness! :)
-    public int compare(Student x, Student y) {
-        if (x.getNumberOfPreferences() < y.getNumberOfPreferences()) {
-            return -1;
-        }
-        if (x.getNumberOfPreferences() > y.getNumberOfPreferences()) {
-            return 1;
-        }
-        return 0;
     }
 }
