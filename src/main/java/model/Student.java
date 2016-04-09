@@ -83,7 +83,7 @@ public class Student implements Dodgy {
         this.orderedPreferences = number;
     }
 
-    public boolean hasReference(Project preference) {
+    public boolean hasPreference(Project preference) {
         return projects.contains(preference);
     }
 
