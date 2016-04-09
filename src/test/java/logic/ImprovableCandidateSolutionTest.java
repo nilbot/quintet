@@ -15,20 +15,17 @@ import static org.junit.Assert.*;
 public class ImprovableCandidateSolutionTest {
     private Config testConfig;
     private DataSource data;
-    //    private Solver SA;
     private ImprovableCandidateSolution testSol;
 
     @Before
     public void setup() throws Exception {
         testConfig = new Config("Memory", "mini.tsv", "SimulatedAnnealing");
         data = testConfig.GetData();
-//        SA = testConfig.GetSolver();
         try {
             sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        SA.InjectData(data);
         TheRNG().setSeed(124);
         testSol = new ImprovableCandidateSolution(data);
     }

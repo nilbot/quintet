@@ -20,26 +20,21 @@ public class ImprovableCandidateSolution extends CandidateSolution {
 
 
     public boolean improve() {
-//        double threshold = 0.3;
-//        double incrementalImprovement = 0.0;
         long curr = System.currentTimeMillis();
-        long due = curr + 2000;
+        long due = curr + 2000; // This worth documenting
         while (curr <= due) {
             CandidateAssignment labrat = getRandomAssignment();
             int previous = getEnergy();
             labrat.randomizeAssignment();
             if (getEnergy() < previous) {
-//                incrementalImprovement += 0.1;
+                // improve success
                 return true;
             } else {
                 labrat.undoChange();
             }
-//            if (incrementalImprovement >= 0.3) {
-//                return true;
-//            }
             curr = System.currentTimeMillis();
         }
-
+        // timed out, failed to improve
         return false;
     }
 }
