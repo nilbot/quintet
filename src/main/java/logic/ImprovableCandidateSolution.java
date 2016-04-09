@@ -26,9 +26,9 @@ public class ImprovableCandidateSolution extends CandidateSolution {
 //        ImprovableCandidateSolution backup = backup();
         while (incrementalImprovement < threshold) {
             CandidateAssignment labrat = getRandomAssignment();
-            int previous = labrat.getEnergy();
+            int previous = getEnergy();
             labrat.randomizeAssignment();
-            if (labrat.getEnergy() < previous) {
+            if (getEnergy() < previous) {
                 incrementalImprovement += 0.1;
             } else {
                 labrat.undoChange();
