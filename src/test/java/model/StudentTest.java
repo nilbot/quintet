@@ -102,7 +102,7 @@ public class StudentTest {
     public void testHasReference() throws Exception {
         s.addProject(testProject_1);
         assertEquals("should have this assignment",
-                true,s.hasReference(testProject_1));
+                true,s.hasPreference(testProject_1));
     }
 
     @Test

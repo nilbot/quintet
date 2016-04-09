@@ -82,6 +82,6 @@ public class CandidateSolution {
      * @return
      */
     public int getFitness(){
-        return getEnergy();
+        return -getEnergy();
     }
 }
