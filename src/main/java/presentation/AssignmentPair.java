@@ -21,6 +21,6 @@ public class AssignmentPair
     }
     @Override
     public String toString() {
-        return "\"" + LHS.getStudentName() + "\": {" + RHS.toString() + "}";
+        return "\"" + LHS.getStudentName() + "\": {" + RHS + "}";
     }
 }

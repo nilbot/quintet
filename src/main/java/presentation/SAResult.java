@@ -3,7 +3,6 @@ package presentation;
 import com.google.gson.Gson;
 import logic.ImprovableCandidateSolution;
 import model.DataSource;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Vector;
 
@@ -27,7 +26,7 @@ public class SAResult implements Result {
 
     @Override
     public Gson JSON() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
