@@ -9,10 +9,11 @@ import presentation.Result;
 
 import java.util.*;
 
-public class GeneticAlgorithm implements Solver {
-    private List<CandidateSolutionExtended> population;
+// TODO: singleton random
+public class GeneticAlgorithm implements GeneticInterface, Solver {
+    private List<CandidateSolutionForGA> population;
     private Map<Integer,Project>  projects;
-    private DataSource repo;
+    DataSource myRepo;
     private Map<Integer,Student> students;
     private Map<String,Student> studentRepo;
     private static int MAX_POPULATION = 10;
@@ -24,8 +25,13 @@ public class GeneticAlgorithm implements Solver {
         this.studentRepo = new HashMap<>();
     }
 
+    public CandidateSolutionForGA combine() {
+        return null;
+    }
+
     // create an initial population consisting of random solutions
-    private void createInitialPopulation() {
+    public void createInitialPopulation() {
+        this.population = new ArrayList<>();
         for (int i = 0; i < MAX_POPULATION; i++) {
             this.population.add(createRandomSolution());
         }
@@ -33,93 +39,62 @@ public class GeneticAlgorithm implements Solver {
 
     // return a CandidateSolution containing candidates that have had their
     // project preferences randomised
-    private CandidateSolutionExtended createRandomSolution() {
+    public CandidateSolutionForGA createRandomSolution() {
         List<CandidateAssignment> randomisedCandidates = new ArrayList<>();
 
         // this object uses the same repo data that was used to inject data
         // into this solver. The intention is to pull out a candidate from
         // the repo, randomise their project preferences, and return them
-        CandidateSolutionExtended solution = new CandidateSolutionExtended(repo);
+        CandidateSolutionForGA solution = new CandidateSolutionForGA(myRepo);
 
         // iterate through every student that appears in the entrySet
         for (Map.Entry<Integer, Student> pair : students.entrySet()) {
             // get the candidate
             CandidateAssignment cand = solution.getAssignmentFor(pair.getValue().getStudentName());
-            // randomise them
-            CandidateAssignment rand = randomiseAssignment(cand);
+            // randomise their project preferences
+            CandidateAssignment rand = randomiseCandidatePreferences(cand);
             // add them to the list
             randomisedCandidates.add(rand);
         }
 
-        //  update the solution with the list of randomised candidates
+        //  update the solution with the list of randomised candidate preferences
         solution.setList(randomisedCandidates);
 
         return solution;
     }
 
-    private CandidateAssignment randomiseAssignment(CandidateAssignment c) {
-        // clear the candidates current projects
-        c.getStudentEntry().getProjects().clear();
+    // cull the weak solutions
+    public List<CandidateSolutionForGA> cull() {
+        List<CandidateSolutionForGA> casualties = new ArrayList<>();
+        Comparator<CandidateSolutionForGA> geneticComparator = new GeneticComparator();
+        List<CandidateSolutionForGA> survivors = new ArrayList<>();
+        double survivalChance;
 
-        // TODO: implement singleton random
-        // add some random projects, don't add duplicates!
-        while (c.getStudentEntry().getProjects().size() < c.getStudentEntry().getNumberOfStatedPreferences()) {
-            int r = (int) Math.floor(Math.random() * 100) % projects.size();
+        // a priority queue to hold a collection of sorted solutions
+        PriorityQueue<CandidateSolutionForGA> orderedSolutions = new PriorityQueue<>(MAX_POPULATION, geneticComparator);
 
-            if (!c.getStudentEntry().hasPreference(projects.get(r))) {
-                c.getStudentEntry().addProject(projects.get(r));
-            }
+        // add all solutions to the priority queue, in preparation for being ranked
+        for (CandidateSolutionForGA c : this.population) {
+            orderedSolutions.add(c);
         }
-        return c;
-    }
 
-    // the strongest members of a population are more likely to survive, by
-    // virtue of their fitness. however! it is not certain. even the weakest
-    // members of a population have a tiny chance that they will survive.
-    // conversely, a healthy specimen close to max fitness can sometimes die,
-    // and less fit specimens can sometimes live and breed.
-    private List<CandidateSolutionExtended> cull(List<CandidateSolutionExtended> population) {
-        List<CandidateSolutionExtended> casualties = new ArrayList<>();
-        List<CandidateSolutionExtended> survivors = new ArrayList<>();
-
-        int survivalChance = 0;
-
-        // TODO: implement Nil's suggestion below
         // "All strategy can be squeezed into a single loop with parameter.
         // Introduce an option, say, probability of mutation, and you random
         // on the first line inside the loop, when your random is greater
         // than that probability threshold, you don't pop from top, remove
         // from random index etc...
-
-        // create a student comparator to act as a temporary fitness function
-        Comparator<CandidateSolutionExtended> comparator = new CandidateSolutionForGA();
-
-        // create a priority queue to hold a collection of sorted solutions
-        PriorityQueue<CandidateSolutionExtended> orderedSolutions = new PriorityQueue<>(MAX_POPULATION, comparator);
-
-        // add all solutions to the priority queue, in preparation for being ranked
-        for (CandidateSolutionExtended c : population) {
-            orderedSolutions.add(c);
-        }
-
         // cull solutions based on their order in the priority queue
         for (int i = 0; i < MAX_POPULATION; i++) {
-            CandidateSolutionExtended curr = orderedSolutions.poll();
-            survivalChance = (100 / MAX_POPULATION) * i;
+            survivalChance = Math.random();
+            CandidateSolutionForGA currentSolution = orderedSolutions.poll();
 
             // cull the bottom 20% of student solutions
-            if (survivalChance > 20) {
-                survivors.add(curr);
+            if (survivalChance > 0.2) {
+                survivors.add(currentSolution);
             } else {
-                casualties.add(curr);
+                casualties.add(currentSolution);
             }
         }
-
-        // strategy 1:
-        // cull students based on a fitness function - not implemented!
-        // note: an iterator returned from a priority queue does not guarantee
-        // ordered traversal!
-        // Iterator<List<Student>> it = population.iterator();
 
         return survivors;
     }
@@ -130,6 +105,7 @@ public class GeneticAlgorithm implements Solver {
         this.students.clear();
         this.studentRepo.clear();
         int idx = 0;
+        this.myRepo = repo;
 
         try {
             for (Project p : repo.ProjectRepo()) {
@@ -137,7 +113,6 @@ public class GeneticAlgorithm implements Solver {
             }
 
             studentRepo = repo.StudentRepo();
-            this.repo = repo;
 
             idx = 0;
             for (Student s : repo.StudentRepo().values()) {
@@ -146,6 +121,25 @@ public class GeneticAlgorithm implements Solver {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public CandidateAssignment mutate() {
+        return null;
+    }
+
+    public CandidateAssignment randomiseCandidatePreferences(CandidateAssignment c) {
+        // clear the candidates current projects
+        c.getStudentEntry().getProjects().clear();
+
+        // add some random projects, don't add duplicates!
+        while (c.getStudentEntry().getProjects().size() < c.getStudentEntry().getNumberOfStatedPreferences()) {
+            int r = (int) Math.floor(Math.random() * 100) % projects.size();
+
+            if (!c.getStudentEntry().hasPreference(projects.get(r))) {
+                c.getStudentEntry().addProject(projects.get(r));
+            }
+        }
+        return c;
     }
 
     @Override
@@ -160,7 +154,8 @@ public class GeneticAlgorithm implements Solver {
         }
 
         createInitialPopulation();
-        List<CandidateSolutionExtended> survivors = cull(this.population);
+
+        List<CandidateSolutionForGA> survivors = cull();
 
         // there is no presentation class for genetic algorithmss yet,
         // so I can't return a proper result
@@ -168,7 +163,7 @@ public class GeneticAlgorithm implements Solver {
         System.out.println("===================================");
         System.out.println("Battle report - Surviving solutions");
         System.out.println("===================================");
-        for (CandidateSolutionExtended c: survivors) {
+        for (CandidateSolutionForGA c: survivors) {
             System.out.println(c.toString()  + "\tFitness: " + c.getFitness());
         }
         System.out.println("==========================================");
