@@ -1,15 +1,41 @@
 package data;
 
-import java.util.PriorityQueue;
+import java.util.TreeSet;
 import logic.CandidateSolution;
 
 /**
  * Created by Kevin on 15/04/2016.
  */
-public class GenePool {
-    private PriorityQueue<CandidateSolution> pool;
+public class GenePool<E> {
+    private TreeSet<E> pool;
+    private E backup = null;
 
-    void addToPool(CandidateSolution solution){ pool.add(solution); }
+    void addToPool(E solution){
+        if(!pool.contains(solution)){
+            pool.add(solution);
+        }
+    }
 
-    PriorityQueue getPool(){ return pool; }
+    TreeSet<E> getPool(){ return pool; }
+
+    int Size(){ return pool.size(); }
+
+    E getBottom() {
+        backup = pool.first();
+        pool.remove(backup);
+        return backup;
+    }
+
+    E getTop(){
+        backup = pool.last();
+        pool.remove(backup);
+        return backup;
+    }
+
+    void Undo(){
+        if(!pool.contains(backup)){
+            pool.add(backup);
+            backup = null;
+        }
+    };
 }
