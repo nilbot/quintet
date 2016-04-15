@@ -1,6 +1,9 @@
 package logic;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.builders.NullBuilder;
+
 import static org.junit.Assert.*;
 
 public class TestCull {
@@ -8,6 +11,7 @@ public class TestCull {
     GAData mock;
     Cull cull;
 
+    @Before
     public void setup() {
         cullConfig = new CullConfig();
         mock = new GADataTestMock();
@@ -17,7 +21,6 @@ public class TestCull {
     // logic tests
     @Test
     public void TestCullMethod() throws Exception {
-        setup();
         mock.initPopulation(100);
         cullConfig.setCullAmount(10);
         GAData result = cull.cull(cullConfig, mock);
@@ -26,14 +29,9 @@ public class TestCull {
     }
 
     // smoke testing
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void TestCullSmoke() {
-        GAData mock = null;
-
-        try {
-            GAData result = cull.cull(cullConfig, mock);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        GAData dMock = null;
+        cull.cull(cullConfig, dMock);
     }
 }
