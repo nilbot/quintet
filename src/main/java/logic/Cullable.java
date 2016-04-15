@@ -1,7 +1,8 @@
 package logic;
 
-import data.GenePool;
-
+/**
+ * Created by aaron on 15/04/16.
+ */
 public interface Cullable {
-    GenePool cull(CullConfig config, GenePool input);
+    GAData cull(CullConfig config, GAData input) throws Exception;
 }
