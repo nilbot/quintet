@@ -38,6 +38,7 @@ public class GeneticAlgorithmTest {
         long begin = System.currentTimeMillis();
 
         Result res = genetic.Solve();
+        System.out.println(res.String());
 
         System.out.println();
         System.out.println("Time to solve: " + (System.currentTimeMillis() - begin));

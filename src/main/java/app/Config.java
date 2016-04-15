@@ -1,16 +1,16 @@
 package app;
 
-import config.*;
-import data.TSVReader;
-import logic.BruteForce;
-import logic.GeneticAlgorithm;
-import logic.Solver;
-import model.DataSource;
+import config.DataSourceType;
+import config.StrategyType;
 import data.InMemoryRepo;
+import data.TSVReader;
+import logic.*;
+import model.DataSource;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -90,8 +90,9 @@ public class Config {
         return null;
     }
 
-    private Solver getBruteForce() {
-        return new BruteForce();
-    }
-    private Solver getGeneticAlgorithm() { return new GeneticAlgorithm(); }
+    private Solver getBruteForce() { return new BruteForce(); }
+    private Solver getGeneticAlgorithm() {
+        Combinable co = new Combine();
+        Cullable cu = new Cull();
+        return new GATemplate(co, cu); }
 }
