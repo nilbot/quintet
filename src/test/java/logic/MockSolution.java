@@ -11,6 +11,12 @@ public class MockSolution implements Comparable {
     @Override
     public int compareTo(Object o) {
         int score = ((MockSolution) o).getFitness();
+        if (this.getFitness() < score) {
+            return -1;
+        }
+        if (this.getFitness() > score) {
+            return 1;
+        }
         return 0;
     }
 
