@@ -9,32 +9,36 @@ public class GenePool<E> {
     private TreeSet<E> pool;
     private E backup = null;
 
-    void addToPool(E solution){
+    public void addToPool(E solution){
         if(!pool.contains(solution)){
             pool.add(solution);
         }
     }
 
-    Set<E> getPool(){ return pool; }
+    public Set<E> getPool(){ return pool; }
 
-    int Size(){ return pool.size(); }
+    public int Size(){ return pool.size(); }
 
-    E getBottom() {
+    public E getBottom() {
         backup = pool.last();
         pool.remove(backup);
         return backup;
     }
 
-    E getTop(){
+    public E getTop(){
         backup = pool.first();
         pool.remove(backup);
         return backup;
     }
 
-    void Undo(){
+    public void Undo(){
         if(!pool.contains(backup)){
             pool.add(backup);
             backup = null;
         }
+    }
+
+    public GenePool() {
+        this.pool = new TreeSet<>();
     }
 }
