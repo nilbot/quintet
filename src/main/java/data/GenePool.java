@@ -36,5 +36,5 @@ public class GenePool<E> {
             pool.add(backup);
             backup = null;
         }
-    };
+    }
 }
