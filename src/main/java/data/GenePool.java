@@ -1,7 +1,6 @@
 package data;
 
-import java.util.TreeSet;
-import logic.CandidateSolution;
+import java.util.*;
 
 /**
  * Created by Kevin on 15/04/2016.
@@ -21,13 +20,13 @@ public class GenePool<E> {
     int Size(){ return pool.size(); }
 
     E getBottom() {
-        backup = pool.first();
+        backup = pool.last();
         pool.remove(backup);
         return backup;
     }
 
     E getTop(){
-        backup = pool.last();
+        backup = pool.first();
         pool.remove(backup);
         return backup;
     }
