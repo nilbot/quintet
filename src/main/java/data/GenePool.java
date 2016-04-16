@@ -15,7 +15,7 @@ public class GenePool<E> {
         }
     }
 
-    TreeSet<E> getPool(){ return pool; }
+    Set<E> getPool(){ return pool; }
 
     int Size(){ return pool.size(); }
 
