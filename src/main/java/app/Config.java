@@ -3,6 +3,7 @@ package app;
 import config.*;
 import data.TSVReader;
 import logic.BruteForce;
+import logic.SimulatedAnnealing;
 import logic.Solver;
 import model.DataSource;
 import data.InMemoryRepo;
@@ -23,7 +24,8 @@ public class Config {
     public Config(){}
 
     // TODO make this useful, maybe 3 params, 4?
-    public Config(String data, String solve){
+    public Config(String data, String dataSource, String solve){
+        this.preset_input = dataSource;
         this.dataSourceTypeConfig = DataSourceType.valueOf(data);
         this.strategyTypeConfig = StrategyType.valueOf(solve);
     }
@@ -70,6 +72,7 @@ public class Config {
             case BruteForce:
                 return getBruteForce();
             case SimulatedAnnealing:
+                return getSimulatedAnnealing();
             case GeneticAlgorithm:
             default:
                 throw new UnsupportedOperationException("Not implemented");
@@ -91,4 +94,5 @@ public class Config {
     private Solver getBruteForce() {
         return new BruteForce();
     }
+    private Solver getSimulatedAnnealing() { return new SimulatedAnnealing(); }
 }
