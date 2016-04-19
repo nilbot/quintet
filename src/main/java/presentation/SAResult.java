@@ -11,7 +11,7 @@ import java.util.Vector;
  */
 public class SAResult implements Result {
     private final Vector<AssignmentPair> pairs;
-    private int score;
+    private double score;
 
     public SAResult(ImprovableCandidateSolution singleton, DataSource repo) {
         pairs = new Vector<>();

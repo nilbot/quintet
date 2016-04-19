@@ -63,7 +63,7 @@ public class SimulatedAnnealingTest {
         if (object.improve()) {
             ImprovableCandidateSolution after = object;
             assertEquals(before, after);
-            assertEquals(before.getFitness(), after.getFitness());
+            assertEquals(before.getFitness(), after.getFitness(), 0.0001);
         }
     }
 }
