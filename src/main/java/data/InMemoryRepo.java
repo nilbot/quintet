@@ -16,6 +16,8 @@ public class InMemoryRepo implements DataSource, Dodgy {
     private Map<String, Student> studentRepo;
     private Set<Project> projectRepo;
     private boolean ready;
+    private static final String repo_not_ready_error_msg = "Repo not ready " +
+            "for query";
 
     public InMemoryRepo() {
         this.studentRepo = new HashMap<>();
@@ -34,7 +36,7 @@ public class InMemoryRepo implements DataSource, Dodgy {
             int orderedPreference = studentData.size() - 2;
             studentObj.setNumberOfStatedPreferences(orderedPreference);
 
-            if (studentData.get(1).toLowerCase().equals("yes")) {
+            if (studentData.get(1).toLowerCase().equalsIgnoreCase("yes")) {
                 String projectString = studentData.get(2);
                 Project project = new Project(projectString);
                 this.projectRepo.add(project);
@@ -67,7 +69,7 @@ public class InMemoryRepo implements DataSource, Dodgy {
     @Override
     public Student RandomStudent() {
         if (!ready) {
-            throw new IllegalStateException("Repo not ready for query");
+            throw new IllegalStateException(repo_not_ready_error_msg);
         }
         Integer pick = TheRNG().nextInt(StudentRepo().values().size());
         return (Student) StudentRepo().values().toArray()[pick];

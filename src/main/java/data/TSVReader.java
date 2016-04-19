@@ -10,7 +10,7 @@ public class TSVReader {
     private String filename;
     private Vector<Vector<String>> tableContent;
     public TSVReader(String file){
-        if (file == null || file == "") {
+        if (file == null || file.equals("")) {
             this.hasSource = false;
         } else {
             this.hasSource = true;
