@@ -42,9 +42,9 @@ public class StupidBruteForceResult implements Result{
 
     private String serialize(Map<Student, Project> plan) {
         StringBuilder sb = new StringBuilder();
-        for (Student key : plan.keySet()) {
-            Project p = plan.get(key);
-            sb.append("\"" + key.getStudentName() + "\": { \"");
+        for (Map.Entry<Student,Project> key : plan.entrySet()) {
+            Project p = key.getValue();
+            sb.append("\"" + key.getKey().getStudentName() + "\": { \"");
             sb.append(p);
             sb.append("\",");
         }

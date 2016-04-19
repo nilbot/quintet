@@ -16,7 +16,7 @@ import static model.service.UtilityService.TheRNG;
  *
  */
 public class CandidateSolution {
-    private final int penalty = 1000;
+    private static final int penalty = 1000;
     private final DataSource prefs;
     private List<CandidateAssignment> theList;
     private Set<Project> set;
