@@ -55,4 +55,15 @@ public class SimulatedAnnealingTest {
         assertTrue(res!=null);
     }
 
+    @Test
+    public void unrelated() throws Exception {
+        ImprovableCandidateSolution object = new ImprovableCandidateSolution
+                (data);
+        ImprovableCandidateSolution before = object;
+        if (object.improve()) {
+            ImprovableCandidateSolution after = object;
+            assertEquals(before, after);
+            assertEquals(before.getFitness(), after.getFitness());
+        }
+    }
 }

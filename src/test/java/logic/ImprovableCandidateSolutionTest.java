@@ -33,7 +33,7 @@ public class ImprovableCandidateSolutionTest {
     @Test
     public void improve() throws Exception {
         int enPrev = testSol.getEnergy();
-        testSol.improve();
+        if (testSol.improve())
         assertTrue("WTF? Y U NO WORK?!", testSol.getEnergy() < enPrev);
     }
 
