@@ -34,7 +34,6 @@ public class SimulatedAnnealing implements Solver {
     private void runTill(long timeOut, ImprovableCandidateSolution singleton) {
         // either iteration reaches 0 or solution can't be improved.
         while (timeOut >= 0 && singleton.improve()) {
-            System.out.println("run countdown " + timeOut);
             timeOut--;
         }
     }

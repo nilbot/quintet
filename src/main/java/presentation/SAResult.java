@@ -11,6 +11,7 @@ import java.util.Vector;
  */
 public class SAResult implements Result {
     private final Vector<AssignmentPair> pairs;
+    private int score;
 
     public SAResult(ImprovableCandidateSolution singleton, DataSource repo) {
         pairs = new Vector<>();
@@ -19,6 +20,7 @@ public class SAResult implements Result {
                 pairs.add(new AssignmentPair(singleton.getAssignmentFor
                         (stdName)));
             }
+            score = singleton.getFitness();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,6 +33,6 @@ public class SAResult implements Result {
 
     @Override
     public String String() {
-        return pairs.toString();
+        return "\"fitness\": " + this.score + "," + "" + pairs.toString();
     }
 }
