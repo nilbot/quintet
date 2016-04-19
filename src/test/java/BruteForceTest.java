@@ -36,7 +36,7 @@ public class BruteForceTest {
     @Test
     public void testFileExists() throws Exception {
         Path path = Paths.get("mini.tsv");
-        assert(path!=null);
+        assert path!=null;
     }
 
 
