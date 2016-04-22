@@ -16,6 +16,12 @@ public class UtilityService {
         return instance;
     }
     public int nextInt(int sz){return instance.r.nextInt(sz);}
+    public int nextInt(){return instance.r.nextInt();}
+    public int nextInt(int l, int r) {
+        if (r <= l) return nextInt(r);
+        int range = r - l;
+        return l+nextInt(range);
+    }
     public void setSeed(int seed){instance.r.setSeed(seed);}
 
     // ==== for test ==== //
