@@ -1,6 +1,5 @@
 package data;
 
-import logic.CandidateSolution;
 import logic.MockSolution;
 import model.DataSource;
 import org.junit.After;
@@ -9,6 +8,7 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static model.service.UtilityService.TheRNG;
 import static org.junit.Assert.*;
 
 /**
@@ -21,7 +21,7 @@ public class GenePoolTest {
     @Before
     public void setUp() throws Exception {
         mockSource = new MockDataSource();
-        mockSol = new MockSolution();
+        mockSol = new MockSolution(124); // seed
         testPool = new GenePool();
     }
 
@@ -45,24 +45,86 @@ public class GenePoolTest {
 
     @Test
     public void size() throws Exception {
-        int before = testPool.Size();
+        int before = testPool.size();
         testPool.addToPool(mockSol);
-        assertTrue(testPool.Size() > before);
+        assertTrue(testPool.size() > before);
     }
 
     @Test
-    public void getBottom() throws Exception {
-
+    public void getWorst() throws Exception {
+        TheRNG().setSeed(124);
+        int numOfSol = TheRNG().nextInt(100);
+        final int crazyNum = 65535;
+        List<MockSolution> referenceList = new ArrayList<>();
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < numOfSol; i++) {
+            MockSolution mo = new MockSolution(TheRNG().nextInt(crazyNum));
+            int f = mo.getFitness();
+            if (f < min) {
+                min = f;
+            }
+            if (f > max) {
+                max = f;
+            }
+            referenceList.add(mo);
+            testPool.addToPool(mo);
+        }
+        int b = testPool.getWorst().getFitness();
+        assertEquals(min,b);
     }
 
     @Test
-    public void getTop() throws Exception {
-
+    public void getBest() throws Exception {
+        TheRNG().setSeed(124);
+        int numOfSol = TheRNG().nextInt(100);
+        final int crazyNum = 65535;
+        List<MockSolution> referenceList = new ArrayList<>();
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < numOfSol; i++) {
+            MockSolution mo = new MockSolution(TheRNG().nextInt(crazyNum));
+            int f = mo.getFitness();
+            if (f < min) {
+                min = f;
+            }
+            if (f > max) {
+                max = f;
+            }
+            referenceList.add(mo);
+            testPool.addToPool(mo);
+        }
+        int t = testPool.getBest().getFitness();
+        assertEquals(max,t);
     }
 
     @Test
     public void undo() throws Exception {
-
+        TheRNG().setSeed(124);
+        int numOfSol = TheRNG().nextInt(100);
+        final int crazyNum = 65535;
+        List<MockSolution> referenceList = new ArrayList<>();
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < numOfSol; i++) {
+            MockSolution mo = new MockSolution(TheRNG().nextInt(crazyNum));
+            int f = mo.getFitness();
+            if (f < min) {
+                min = f;
+            }
+            if (f > max) {
+                max = f;
+            }
+            referenceList.add(mo);
+            testPool.addToPool(mo);
+        }
+        MockSolution pick = referenceList.get(TheRNG().nextInt(referenceList.
+                size()));
+        MockSolution b = testPool.getBest();
+//        p = testPool.peekBest();
+        testPool.undo();
+        MockSolution n = testPool.peekBest();
+        assertEquals(b,n);
     }
 
 }

@@ -2,6 +2,8 @@ package logic;
 
 import java.util.*;
 
+import static model.service.UtilityService.TheRNG;
+
 /**
  * MockSolution:
  */
@@ -20,18 +22,20 @@ public class MockSolution implements Comparable {
         return 0;
     }
 
-    public MockSolution() {
-        MockAssignment assignment1 = new MockAssignment(12);
-        MockAssignment assignment2 = new MockAssignment(5);
+    private final int numberOfAssignments = 4; // 4 * 4bits = 16 bytes = +int32
+    private final int maxScore = 7; // 111 = 3 bits
+    public MockSolution(int seed) {
+        TheRNG().setSeed(seed);
         theList = new ArrayList<>();
-        theList.add(assignment1);
-        theList.add(assignment2);
+        for (int i = 0; i < numberOfAssignments; i++) {
+            theList.add(new MockAssignment(TheRNG().nextInt(maxScore)));
+        }
     }
 
     public int getFitness() {
         int rst = 0;
-        for (int i = 0; i < 2; i++) {
-            rst += theList.get(i).getFitness() * (1 << i);
+        for (int i = 0; i < numberOfAssignments; i++) {
+            rst += theList.get(i).getFitness() * (1 << numberOfAssignments);
         }
         return rst;
     }
