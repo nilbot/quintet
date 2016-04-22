@@ -35,7 +35,7 @@ public class MockSolution implements Comparable {
     public int getFitness() {
         int rst = 0;
         for (int i = 0; i < numberOfAssignments; i++) {
-            rst += theList.get(i).getFitness() * (1 << numberOfAssignments);
+            rst += theList.get(i).getFitness() * (1 << numberOfAssignments * i);
         }
         return rst;
     }
