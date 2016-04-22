@@ -15,7 +15,7 @@ import static model.service.UtilityService.TheRNG;
 /**
  *
  */
-public class CandidateSolution {
+public class CandidateSolution implements Comparable<CandidateSolution> {
     private static final int penalty = 1000;
     private final DataSource prefs;
     private List<CandidateAssignment> theList;
@@ -83,5 +83,16 @@ public class CandidateSolution {
      */
     public double getFitness(){
         return 1/getEnergy();
+    }
+
+    @Override
+    public int compareTo(CandidateSolution o) {
+        if (this.getFitness() < o.getFitness()) {
+            return -1;
+        }
+        if (this.getFitness() > o.getFitness()) {
+            return 1;
+        }
+        return 0;
     }
 }
