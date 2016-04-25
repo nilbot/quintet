@@ -15,6 +15,7 @@ public class UtilityService {
         if (instance == null)instance = new UtilityService();
         return instance;
     }
+    public double nextDouble(){return instance.r.nextDouble();}
     public int nextInt(int sz){return instance.r.nextInt(sz);}
     public int nextInt(){return instance.r.nextInt();}
     public int nextInt(int l, int r) {
@@ -28,7 +29,7 @@ public class UtilityService {
     public List<Project> TestRandomPreferenceUtility(Dodgy input,
                                                     Integer Seed,
                                                     Integer number){
-        List<Project> rst = new ArrayList<Project>();
+        List<Project> rst = new ArrayList<>();
         this.setSeed(Seed);
         for (int i = 0; i<number;i++) {
             rst.add(input.getRandomPreference());
