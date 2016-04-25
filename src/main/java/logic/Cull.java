@@ -2,12 +2,12 @@ package logic;
 
 import data.GenePool;
 
-import java.io.*;
-import java.util.*;
-
 public class Cull implements Cullable {
 
     public GenePool cull(CullConfig config, GenePool input) {
+        double probability = config.getCullProbability();
+        double rand;
+
         if (input == null || input.Size() == 0) {
             throw new IllegalArgumentException("input is null");
         }
@@ -19,11 +19,15 @@ public class Cull implements Cullable {
             throw new IllegalArgumentException("Cull amount can not be larger" +
                     " than population");
         }
-        // modify the genepool using information from config
-        for (int i = 0; i < config.getCullAmount(); i++) {
-            input.getBottom();
-        }
 
+        // cull solutions if they fall inside the range of probability
+        for (int i = 0; i < config.getCullAmount(); i++) {
+            rand = config.getRNG();
+            if (rand <= probability) {
+                // remove the least fittest solution
+                input.getTop();
+            }
+        }
         return input;
     }
 }
