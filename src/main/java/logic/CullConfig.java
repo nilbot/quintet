@@ -1,17 +1,15 @@
 package logic;
 
-import java.util.Random;
+import static model.service.UtilityService.TheRNG;
 
 public class CullConfig {
     private int cullAmount;
     private double cullProbability;
-    private Random rand;
 
     // constructor initialises default CullConfig values
     public CullConfig(int cullAmount, double cullProbability) {
         this.cullAmount = cullAmount;
         this.cullProbability = cullProbability;
-        rand = new Random();
     }
 
     public int getCullAmount() {
@@ -23,7 +21,7 @@ public class CullConfig {
     }
 
     public double getRNG() {
-        return (this.rand.nextDouble());
+        return (TheRNG().nextDouble());
     }
 
     // manually set the amount of solutions that should be culled
@@ -36,11 +34,5 @@ public class CullConfig {
     public double setCullProbability(double n) {
         this.cullProbability = n;
         return this.cullProbability;
-    }
-
-    // set the RNG (for use with testing)
-    public void setCullSeed(Random rand, long seed) {
-        this.rand = rand;
-        this.rand.setSeed(seed);
     }
 }

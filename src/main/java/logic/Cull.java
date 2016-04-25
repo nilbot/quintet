@@ -8,14 +8,14 @@ public class Cull implements Cullable {
         double probability = config.getCullProbability();
         double rand;
 
-        if (input == null || input.Size() == 0) {
+        if (input == null || input.size() == 0) {
             throw new IllegalArgumentException("input is null");
         }
 
         // establish that the config is sane
-        if (config.getCullAmount() >= input.Size()) {
+        if (config.getCullAmount() >= input.size()) {
             System.err.println(config.getCullAmount());
-            System.err.println(input.Size());
+            System.err.println(input.size());
             throw new IllegalArgumentException("Cull amount can not be larger" +
                     " than population");
         }
@@ -25,7 +25,7 @@ public class Cull implements Cullable {
             rand = config.getRNG();
             if (rand <= probability) {
                 // remove the least fittest solution
-                input.getTop();
+                input.getWorst();
             }
         }
         return input;
