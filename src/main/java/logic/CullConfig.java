@@ -20,7 +20,7 @@ public class CullConfig {
         return this.cullProbability;
     }
 
-    public double getRNG() {
+    public double getRandom() {
         return (TheRNG().nextDouble());
     }
 

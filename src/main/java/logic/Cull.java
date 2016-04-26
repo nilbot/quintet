@@ -22,7 +22,7 @@ public class Cull implements Cullable {
 
         // cull solutions if they fall inside the range of probability
         for (int i = 0; i < config.getCullAmount(); i++) {
-            rand = config.getRNG();
+            rand = config.getRandom();
             if (rand <= probability) {
                 // remove the least fittest solution
                 input.getWorst();
