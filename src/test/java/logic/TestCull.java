@@ -39,18 +39,18 @@ public class TestCull {
 
     @Test
     public void testCullMediumProbability() throws Exception {
-        cullConfig.setCullAmount(25);
-        cullConfig.setCullProbability(0.5);
+        cullConfig.setCullAmount(12);
+        cullConfig.setCullProbability(1.0);
         testPool = cull.cull(cullConfig, testPool);
-        assertEquals(34, testPool.size());
+        assertEquals(38, testPool.size());
     }
 
     @Test
     public void testCullLowProbability() throws Exception {
-        cullConfig.setCullAmount(25);
-        cullConfig.setCullProbability(0.2);
+        cullConfig.setCullAmount(5);
+        cullConfig.setCullProbability(1.0);
         testPool = cull.cull(cullConfig, testPool);
-        assertEquals(44, testPool.size());
+        assertEquals(45, testPool.size());
     }
 
     // smoke testing
