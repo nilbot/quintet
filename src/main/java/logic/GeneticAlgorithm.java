@@ -30,7 +30,7 @@ public class GeneticAlgorithm {
 
     }
 
-    public void templateSolve() {
+    public GeneticCandidateSolution templateSolve() {
         populationInitialSeeding();
         for (int i = 0; i < evolutionConfig.evolutionStepMax; i++){
             //TODO pull request some of the interface code please so that
@@ -38,6 +38,7 @@ public class GeneticAlgorithm {
 //            cullImplementor.cull(this.cullConfig, this.genepool);
 //            combineConfig.combine(this.combineConfig,this.genepool);
         }
+        return this.genepool.getBest();
     }
 
     // do some initial step to stem up the population. thrive my minions, i
