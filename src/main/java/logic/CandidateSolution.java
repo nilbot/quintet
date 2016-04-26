@@ -95,4 +95,10 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
         }
         return 0;
     }
+    
+    public void mutate(int radiation) {
+	for (int i=0; i<radiation; i++) {
+	    getRandomAssignment().randomizeAssignment();
+	}
+    }
 }
