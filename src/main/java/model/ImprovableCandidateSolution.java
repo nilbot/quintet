@@ -1,11 +1,8 @@
-package logic;
+package model;
 
-import java.util.*;
-
+import model.CandidateAssignment;
+import model.CandidateSolution;
 import model.DataSource;
-import model.Student;
-
-import java.util.Map;
 
 /**
  * ImprovableCandidateSolution:

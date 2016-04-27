@@ -1,5 +1,6 @@
 package logic;
 
+import config.CullConfig;
 import data.GenePool;
 
 import java.util.Iterator;
