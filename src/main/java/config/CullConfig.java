@@ -1,4 +1,4 @@
-package logic;
+package config;
 
 import static model.service.UtilityService.TheRNG;
 

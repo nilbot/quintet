@@ -1,4 +1,4 @@
-package logic;
+package model;
 
 import model.Project;
 import model.Student;

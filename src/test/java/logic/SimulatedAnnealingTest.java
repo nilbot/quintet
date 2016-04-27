@@ -2,6 +2,7 @@ package logic;
 
 import app.Config;
 import model.DataSource;
+import model.ImprovableCandidateSolution;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,6 +1,7 @@
 package logic;
 
 import model.DataSource;
+import model.ImprovableCandidateSolution;
 import presentation.Result;
 import presentation.SAResult;
 

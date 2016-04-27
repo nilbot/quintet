@@ -1,10 +1,5 @@
-package logic;
+package model;
 
-import model.DataSource;
-import model.Project;
-import model.Student;
-
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
