@@ -5,12 +5,12 @@ import data.GenePool;
 import model.GeneticCandidateSolution;
 
 /**
- * Combine:
+ * combine:
  */
 public class Combine implements Combinable {
     @Override
     public GenePool
-    Combine(CombineConfig cfg, GenePool data) {
+    combine(CombineConfig cfg, GenePool data) {
         List<GeneticCandidateSolution> parents;
         GeneticCandidateSolution husband = null;
         GeneticCandidateSolution wife = null;

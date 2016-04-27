@@ -15,22 +15,20 @@ public class GeneticAlgorithm {
     private final CullConfig cullConfig;
     private final EvolutionConfig config;
     private Cullable cullImplementor;
-//    private final Combine combineImplementor;
-    private final Object combineConfig;
+    private Combinable combineImplementor;
+    private final CombineConfig combineConfig;
     private final int killAmount = 5;
     private final double probablityToKillGoodGuys = 0.2;
 
     public GeneticAlgorithm(EvolutionConfig cfg) {
-        this.genepool = new GenePool<GeneticCandidateSolution>();
-
+        this.genepool = new GenePool<>();
         this.cullConfig = new CullConfig(killAmount, probablityToKillGoodGuys);
-        // cullconfig
-        // injection
-        this.combineConfig = new Object();
+        Mutagen mutagen = new Virus();
+        this.combineConfig = new CombineConfig(CombineConfig.NOBLE,
+                CombineConfig.MERGEBEST, mutagen);
         this.config = cfg;
-        //TODO pull request some of the interface first please
         this.cullImplementor = new Cull();
-//        this.combineImplementor = new Combine(combineConfig, genepool);
+        this.combineImplementor = new Combine();
 
     }
 
@@ -38,7 +36,7 @@ public class GeneticAlgorithm {
         populationInitialSeeding();
         for (int i = 0; i < config.evolutionStepMax; i++){
             cullImplementor.cull(this.cullConfig, this.genepool);
-//            combineConfig.combine(this.combineConfig,this.genepool);
+            combineImplementor.combine(this.combineConfig,this.genepool);
         }
         return this.genepool.getBest();
     }
