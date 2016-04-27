@@ -34,12 +34,11 @@ public class Cull implements Cullable {
         // use the values in cullIndex to cull elements in the genepool
         Iterator<Integer> ci = cullIndex.iterator();
         Iterator pi = input.getPool().iterator();
-        int currVal = -1;
+        int currVal = ci.next();
         int i = 0;
 
         while (pi.hasNext()) {
             // only retrieve the iterator value once at the start of the loop
-            if (currVal == -1) { currVal = ci.next(); }
             pi.next();
             if (i == currVal) {
                 pi.remove();
