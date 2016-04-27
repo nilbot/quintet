@@ -20,10 +20,6 @@ public class CullConfig {
         return this.cullProbability;
     }
 
-    public double getRandom() {
-        return (TheRNG().nextDouble());
-    }
-
     // manually set the amount of solutions that should be culled
     public int setCullAmount(int n) {
         this.cullAmount = n;

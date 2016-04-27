@@ -21,8 +21,8 @@ public class TestCull {
         mockSol = new MockSolution(1);
         testPool = new GenePool();
 
-        // generate 50 random solutions (need to choose 52 for this)
-        for (int i = 0; i < 52; i++) {
+        // generate 25 random solutions (need to choose 52 for this)
+        for (int i = 0; i < 25; i++) {
             mockSol = new MockSolution(i);
             testPool.addToPool(mockSol);
         }
@@ -31,26 +31,26 @@ public class TestCull {
     // logic tests
     @Test
     public void testCullMaxProbability() throws Exception {
-        cullConfig.setCullAmount(25);
+        cullConfig.setCullAmount(10);
         cullConfig.setCullProbability(1.0);
         testPool = cull.cull(cullConfig, testPool);
-        assertEquals(25, testPool.size());
+        assertEquals(15, testPool.size());
     }
 
     @Test
     public void testCullMediumProbability() throws Exception {
-        cullConfig.setCullAmount(12);
+        cullConfig.setCullAmount(5);
         cullConfig.setCullProbability(1.0);
         testPool = cull.cull(cullConfig, testPool);
-        assertEquals(38, testPool.size());
+        assertEquals(20, testPool.size());
     }
 
     @Test
     public void testCullLowProbability() throws Exception {
-        cullConfig.setCullAmount(5);
+        cullConfig.setCullAmount(3);
         cullConfig.setCullProbability(1.0);
         testPool = cull.cull(cullConfig, testPool);
-        assertEquals(45, testPool.size());
+        assertEquals(22, testPool.size());
     }
 
     // smoke testing

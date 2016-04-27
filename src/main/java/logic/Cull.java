@@ -2,11 +2,16 @@ package logic;
 
 import data.GenePool;
 
+import java.util.Iterator;
+import java.util.TreeSet;
+
+import static model.service.UtilityService.TheRNG;
+
 public class Cull implements Cullable {
 
     public GenePool cull(CullConfig config, GenePool input) {
         double probability = config.getCullProbability();
-        double rand;
+        TreeSet<Integer> cullIndex = new TreeSet<>();
 
         if (input == null || input.size() == 0) {
             throw new IllegalArgumentException("input is null");
@@ -20,13 +25,29 @@ public class Cull implements Cullable {
                     " than population");
         }
 
-        // cull solutions if they fall inside the range of probability
-        for (int i = 0; i < config.getCullAmount(); i++) {
-            rand = config.getRandom();
-            if (rand <= probability) {
-                // remove the least fittest solution
-                input.getWorst();
+        // generate a set of random values to cull, ranging over the size
+        // of the pool. this is just uniform distribution for now
+        while (cullIndex.size() < config.getCullAmount()) {
+            cullIndex.add(TheRNG().nextInt(input.size()));
+        }
+
+        // use the values in cullIndex to cull elements in the genepool
+        Iterator<Integer> ci = cullIndex.iterator();
+        Iterator pi = input.getPool().iterator();
+        int currVal = -1;
+        int i = 0;
+
+        while (pi.hasNext()) {
+            // only retrieve the iterator value once at the start of the loop
+            if (currVal == -1) { currVal = ci.next(); }
+            pi.next();
+            if (i == currVal) {
+                pi.remove();
+                if (ci.hasNext()) {
+                    currVal = ci.next();
+                } else { break; }
             }
+            i++;
         }
         return input;
     }
