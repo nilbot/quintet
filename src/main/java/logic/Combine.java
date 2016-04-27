@@ -2,6 +2,7 @@ package logic;
 
 import java.util.*;
 import data.GenePool;
+import model.GeneticCandidateSolution;
 
 /**
  * Combine:

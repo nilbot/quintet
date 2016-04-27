@@ -1,5 +1,7 @@
 package logic;
 
+import model.GeneticCandidateSolution;
+
 /**
  * Mutagen:
  */
