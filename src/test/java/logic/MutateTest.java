@@ -2,6 +2,7 @@ package logic;
 
 import static org.junit.Assert.*;
 import model.DataSource;
+import model.GeneticCandidateSolution;
 import model.Project;
 
 import org.junit.Before;
@@ -15,21 +16,26 @@ import app.Config;
 public class MutateTest {
     private Config testConfig;
     private DataSource data;
-    private CandidateSolution testSol;
+    private GeneticCandidateSolution testSol; //use genetic instead
 
     @Before
     public void setup() throws Exception {
         testConfig = new Config("Memory", "mutate_test.tsv", "GeneticAlgorithm");
         data = testConfig.GetData();
-        testSol = new CandidateSolution(data);
+        testSol = new GeneticCandidateSolution(data);
     }
 
     @Test
     public void mutate() throws Exception {
+	Mutate m = new Mutate(1.0);
 	Project a = testSol.getAssignmentFor("Loki Laufeyson").getAssignedProject();
-	testSol.mutate(5);
+	testSol = m.mutate(testSol);
 	Project b = testSol.getAssignmentFor("Loki Laufeyson").getAssignedProject();
-	
 	assertNotSame("Mutate is not mutating", a, b);
+	
+	m.changeMutationChance(0.0);
+	testSol = m.mutate(testSol);
+	Project c = testSol.getAssignmentFor("Loki Laufeyson").getAssignedProject();
+	assertSame("Mutate is mutating when it shouldn't", c, b);
     }
 }
