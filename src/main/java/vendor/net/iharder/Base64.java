@@ -508,28 +508,28 @@ public class Base64
         // significant bytes passed in the array.
         // We have to shift left 24 in order to flush out the 1's that appear
         // when Java treats a value as negative that is cast from a byte to an int.
-        int inBuff =   ( numSigBytes > 0 ? ((source[ srcOffset     ] << 24) >>>  8) : 0 )
-                     | ( numSigBytes > 1 ? ((source[ srcOffset + 1 ] << 24) >>> 16) : 0 )
-                     | ( numSigBytes > 2 ? ((source[ srcOffset + 2 ] << 24) >>> 24) : 0 );
+        int inBuff =   ( numSigBytes > 0 ? (source[ srcOffset     ] << 24) >>>  8 : 0 )
+                     | ( numSigBytes > 1 ? (source[ srcOffset + 1 ] << 24) >>> 16 : 0 )
+                     | ( numSigBytes > 2 ? (source[ srcOffset + 2 ] << 24) >>> 24 : 0 );
 
         switch( numSigBytes )
         {
             case 3:
-                destination[ destOffset     ] = ALPHABET[ (inBuff >>> 18)        ];
+                destination[ destOffset     ] = ALPHABET[ inBuff >>> 18        ];
                 destination[ destOffset + 1 ] = ALPHABET[ (inBuff >>> 12) & 0x3f ];
                 destination[ destOffset + 2 ] = ALPHABET[ (inBuff >>>  6) & 0x3f ];
                 destination[ destOffset + 3 ] = ALPHABET[ (inBuff       ) & 0x3f ];
                 return destination;
                 
             case 2:
-                destination[ destOffset     ] = ALPHABET[ (inBuff >>> 18)        ];
+                destination[ destOffset     ] = ALPHABET[ inBuff >>> 18        ];
                 destination[ destOffset + 1 ] = ALPHABET[ (inBuff >>> 12) & 0x3f ];
                 destination[ destOffset + 2 ] = ALPHABET[ (inBuff >>>  6) & 0x3f ];
                 destination[ destOffset + 3 ] = EQUALS_SIGN;
                 return destination;
                 
             case 1:
-                destination[ destOffset     ] = ALPHABET[ (inBuff >>> 18)        ];
+                destination[ destOffset     ] = ALPHABET[ inBuff >>> 18        ];
                 destination[ destOffset + 1 ] = ALPHABET[ (inBuff >>> 12) & 0x3f ];
                 destination[ destOffset + 2 ] = EQUALS_SIGN;
                 destination[ destOffset + 3 ] = EQUALS_SIGN;
@@ -679,13 +679,13 @@ public class Base64
         catch( java.io.IOException e ) {
             // Catch it and then throw it immediately so that
             // the finally{} block is called for cleanup.
-            throw e;
+            e.printStackTrace();
         }   // end catch
         finally {
-            try{ oos.close();   } catch( Exception e ){}
-            try{ gzos.close();  } catch( Exception e ){}
-            try{ b64os.close(); } catch( Exception e ){}
-            try{ baos.close();  } catch( Exception e ){}
+            try{ oos.close();   } catch( Exception e ){e.printStackTrace();}
+            try{ gzos.close();  } catch( Exception e ){e.printStackTrace();}
+            try{ b64os.close(); } catch( Exception e ){e.printStackTrace();}
+            try{ baos.close();  } catch( Exception e ){e.printStackTrace();}
         }   // end finally
         
         // Return value according to relevant encoding.
@@ -921,12 +921,12 @@ public class Base64
             catch( java.io.IOException e ) {
                 // Catch it and then throw it immediately so that
                 // the finally{} block is called for cleanup.
-                throw e;
+                e.printStackTrace();
             }   // end catch
             finally {
-                try{ gzos.close();  } catch( Exception e ){}
-                try{ b64os.close(); } catch( Exception e ){}
-                try{ baos.close();  } catch( Exception e ){}
+                try{ gzos.close();  } catch( Exception e ){e.printStackTrace();}
+                try{ b64os.close(); } catch( Exception e ){e.printStackTrace();}
+                try{ baos.close();  } catch( Exception e ){e.printStackTrace();}
             }   // end finally
 
             return baos.toByteArray();
@@ -1086,7 +1086,7 @@ public class Base64
             int outBuff =   ( ( DECODABET[ source[ srcOffset     ] ] & 0xFF ) << 18 )
                           | ( ( DECODABET[ source[ srcOffset + 1 ] ] & 0xFF ) << 12 )
                           | ( ( DECODABET[ source[ srcOffset + 2 ] ] & 0xFF ) <<  6)
-                          | ( ( DECODABET[ source[ srcOffset + 3 ] ] & 0xFF )      );
+                          | (  DECODABET[ source[ srcOffset + 3 ] ] & 0xFF       );
 
             
             destination[ destOffset     ] = (byte)( outBuff >> 16 );
@@ -1257,7 +1257,7 @@ public class Base64
         // Check to see if it's gzip-compressed
         // GZIP Magic Two-Byte Number: 0x8b1f (35615)
         boolean dontGunzip = (options & DONT_GUNZIP) != 0;
-        if( (bytes != null) && (bytes.length >= 4) && (!dontGunzip) ) {
+        if( bytes != null && bytes.length >= 4 && !dontGunzip ) {
             
             int head = ((int)bytes[0] & 0xff) | ((bytes[1] << 8) & 0xff00);
             if( java.util.zip.GZIPInputStream.GZIP_MAGIC == head )  {
@@ -1285,9 +1285,9 @@ public class Base64
                     // Just return originally-decoded bytes
                 }   // end catch
                 finally {
-                    try{ baos.close(); } catch( Exception e ){}
-                    try{ gzis.close(); } catch( Exception e ){}
-                    try{ bais.close(); } catch( Exception e ){}
+                    try{ baos.close(); } catch( Exception e ){e.printStackTrace();}
+                    try{ gzis.close(); } catch( Exception e ){e.printStackTrace();}
+                    try{ bais.close(); } catch( Exception e ){e.printStackTrace();}
                 }   // end finally
 
             }   // end if: gzipped
@@ -1377,8 +1377,8 @@ public class Base64
             throw e;    // Catch and throw in order to execute finally{}
         }   // end catch
         finally {
-            try{ bais.close(); } catch( Exception e ){}
-            try{ ois.close();  } catch( Exception e ){}
+            try{ bais.close(); } catch( Exception e ){e.printStackTrace();}
+            try{ ois.close();  } catch( Exception e ){e.printStackTrace();}
         }   // end finally
         
         return obj;
@@ -1417,7 +1417,7 @@ public class Base64
             throw e; // Catch and throw to execute finally{} block
         }   // end catch: java.io.IOException
         finally {
-            try{ bos.close(); } catch( Exception e ){}
+            try{ bos.close(); } catch( Exception e ){e.printStackTrace();}
         }   // end finally
         
     }   // end encodeToFile
@@ -1449,7 +1449,7 @@ public class Base64
             throw e; // Catch and throw to execute finally{} block
         }   // end catch: java.io.IOException
         finally {
-                try{ bos.close(); } catch( Exception e ){}
+                try{ bos.close(); } catch( Exception e ){e.printStackTrace();}
         }   // end finally
         
     }   // end decodeToFile
@@ -1507,10 +1507,10 @@ public class Base64
             
         }   // end try
         catch( java.io.IOException e ) {
-            throw e; // Catch and release to execute finally{}
+            e.printStackTrace(); // Catch and release to execute finally{}
         }   // end catch: java.io.IOException
         finally {
-            try{ bis.close(); } catch( Exception e) {}
+            try{ bis.close(); } catch( Exception e) {e.printStackTrace();}
         }   // end finally
         
         return decodedData;
@@ -1560,10 +1560,10 @@ public class Base64
                 
         }   // end try
         catch( java.io.IOException e ) {
-            throw e; // Catch and release to execute finally{}
+            e.printStackTrace(); // Catch and release to execute finally{}
         }   // end catch: java.io.IOException
         finally {
-            try{ bis.close(); } catch( Exception e) {}
+            try{ bis.close(); } catch( Exception e) {e.printStackTrace();}
         }   // end finally
         
         return encodedData;
@@ -1588,11 +1588,11 @@ public class Base64
             out.write( encoded.getBytes("US-ASCII") ); // Strict, 7-bit output.
         }   // end try
         catch( java.io.IOException e ) {
-            throw e; // Catch and release to execute finally{}
+            e.printStackTrace(); // Catch and release to execute finally{}
         }   // end catch
         finally {
             try { out.close(); }
-            catch( Exception ex ){}
+            catch( Exception ex ){ex.printStackTrace();}
         }   // end finally    
     }   // end encodeFileToFile
 
@@ -1620,7 +1620,7 @@ public class Base64
         }   // end catch
         finally {
             try { out.close(); }
-            catch( Exception ex ){}
+            catch( Exception ex ){ex.printStackTrace();}
         }   // end finally    
     }   // end decodeFileToFile
     
