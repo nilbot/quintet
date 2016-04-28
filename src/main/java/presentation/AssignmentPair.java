@@ -1,6 +1,6 @@
 package presentation;
 
-import logic.CandidateAssignment;
+import model.CandidateAssignment;
 import model.Project;
 import model.Student;
 

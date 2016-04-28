@@ -1,7 +1,7 @@
 package presentation;
 
 import com.google.gson.Gson;
-import logic.ImprovableCandidateSolution;
+import model.ImprovableCandidateSolution;
 import model.DataSource;
 
 import java.util.Vector;
