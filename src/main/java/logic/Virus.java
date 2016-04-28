@@ -8,6 +8,7 @@ import model.GeneticCandidateSolution;
 public class Virus implements Mutagen {
     @Override
     public GeneticCandidateSolution mutate(GeneticCandidateSolution original) {
-        return null;
+        original.getRandomAssignment().randomizeAssignment();
+        return original;
     }
 }
