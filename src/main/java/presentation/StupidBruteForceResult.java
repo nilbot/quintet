@@ -10,12 +10,14 @@ import java.util.Map.*;
 /**
  * StupidBruteForceResult
  */
-public class StupidBruteForceResult extends GsonSerialzable implements Result {
-    private final int cost;
+public class StupidBruteForceResult extends AbstractResult implements Result {
+    private final int energyScore;
+    private double fitness;
     private Vector<CandidateAssignment> assignments;
 
-    public StupidBruteForceResult(int cost, Map<Student,Project> map) {
-        this.cost = cost;
+    public StupidBruteForceResult(int energyScore, Map<Student,Project> map) {
+        solvingStrategy = "Brute Force";
+        this.energyScore = energyScore;
         assignments = new Vector<>();
         if (map != null) {
             for (Entry<Student,Project> e : map.entrySet()) {
@@ -32,11 +34,12 @@ public class StupidBruteForceResult extends GsonSerialzable implements Result {
 
     @Override
     public String toJson() {
+        fitness = 1 / (double) energyScore;
         return GSON.toJson(this, StupidBruteForceResult.class);
     }
 
     @Override
     public int energyScore() {
-        return cost;
+        return energyScore;
     }
 }

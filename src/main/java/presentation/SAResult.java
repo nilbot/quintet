@@ -8,17 +8,17 @@ import java.util.Vector;
 /**
  * SAResult:
  */
-public class SAResult extends GsonSerialzable implements Result {
+public class SAResult extends AbstractResult implements Result {
     private final Vector<CandidateAssignment> assignments;
     private final double fitness;
-    private final int energy;
+    private final int energyScore;
     private final int iterationPerformed;
 
     public SAResult(ImprovableCandidateSolution solution, int run) {
-
+        solvingStrategy = "Simulated Annealing";
         assignments = new Vector<>(solution.listOfAssignments());
         fitness = solution.getFitness();
-        energy = solution.getEnergy();
+        energyScore = solution.getEnergy();
         iterationPerformed = run;
     }
 
@@ -34,6 +34,6 @@ public class SAResult extends GsonSerialzable implements Result {
 
     @Override
     public int energyScore() {
-        return energy;
+        return energyScore;
     }
 }
