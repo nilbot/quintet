@@ -90,4 +90,6 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
         }
         return 0;
     }
+
+    public final List<CandidateAssignment> listOfAssignments() {return theList;}
 }

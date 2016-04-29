@@ -28,7 +28,7 @@ public class SimulatedAnnealing implements Solver {
         long timeOut = 50;
         runTill(timeOut, singleton);
 
-        SAResult res = new SAResult(singleton, repo);
+        SAResult res = new SAResult(singleton);
         return res;
     }
 

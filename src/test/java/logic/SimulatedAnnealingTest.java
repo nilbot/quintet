@@ -52,7 +52,7 @@ public class SimulatedAnnealingTest {
     @Test
     public void solve() throws Exception {
         Result res = SA.Solve();
-        System.out.println(res.String());
+        System.out.println(res.toJson());
         assertTrue(res!=null);
     }
 

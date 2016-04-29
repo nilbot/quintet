@@ -30,6 +30,6 @@ public class ConsoleApp {
         }
         Result res = solver.Solve();
 
-        System.out.println(res.String());
+        System.out.println(res.toJson());
     }
 }

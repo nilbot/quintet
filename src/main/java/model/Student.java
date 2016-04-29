@@ -17,9 +17,9 @@ public class Student implements Dodgy {
      * <p>
      * this way all 3 requirements can be covered using 1 int variable.
      */
-    private int orderedPreferences;
-    private List<Project> projects;
-    private boolean hasPreassigned;
+    transient private int orderedPreferences;
+    transient private List<Project> projects;
+    transient private boolean hasPreassigned;
 
     public Student(String studentname) {
         this.Name = studentname;

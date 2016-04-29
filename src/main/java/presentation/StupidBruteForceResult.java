@@ -8,17 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** TODO DON'T EXTEND ME OR COPY PASTE ME, YOU R DOING IT WRONG, GOOGLE PROPER
- *  TODO SERIALIZATION EXAMPLE
+/**
  * StupidBruteForceResult
  */
-public class StupidBruteForceResult implements Result{
+public class StupidBruteForceResult extends GsonSerialzable {
     private final int cost;
     private Map<Student,Project> plan;
 
     public StupidBruteForceResult(int cost, Map<Student,Project> arrangement) {
         this.cost = cost;
-        int len = arrangement.size();
         plan = new HashMap<>();
         if (arrangement != null) {
             plan = arrangement;
@@ -26,28 +24,11 @@ public class StupidBruteForceResult implements Result{
     }
     @Override
     public String toString() {
-        return String();
+        return toJson();
     }
 
     @Override
-    public Gson JSON() {
-        return null;
-    }
-
-    @Override
-    public String String() {
-        return "\"cost\": " + this.cost + ", \"plan\": {" + serialize(plan) +
-                "\n}";
-    }
-
-    private String serialize(Map<Student, Project> plan) {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Student,Project> key : plan.entrySet()) {
-            Project p = key.getValue();
-            sb.append("\"" + key.getKey().getStudentName() + "\": { \"");
-            sb.append(p);
-            sb.append("\",");
-        }
-        return sb.toString();
+    public String toJson() {
+        return GSON.toJson(this, StupidBruteForceResult.class);
     }
 }
