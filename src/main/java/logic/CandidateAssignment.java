@@ -26,6 +26,15 @@ public class CandidateAssignment {
 		randomizeAssignment();
 	}
 
+	public void swapProjects(CandidateAssignment another)
+	{
+		String projectName = this.getAssignedProject().toString();
+		this.theAssignment = new Project(another.getAssignedProject().toString());
+		another.theAssignment = new Project(projectName);
+	}
+
+
+
 	/**
 	 * @return
 	 */

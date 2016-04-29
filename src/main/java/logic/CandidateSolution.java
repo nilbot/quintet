@@ -5,10 +5,7 @@ import model.Project;
 import model.Student;
 
 import javax.xml.crypto.Data;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static model.service.UtilityService.TheRNG;
 
@@ -37,6 +34,28 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
         }
         this.set = new HashSet<Project>();
     }
+
+    //copy constructor
+    public CandidateSolution(CandidateSolution another)
+    {
+        this.prefs = another.prefs;
+        this.theList = another.theList;
+        this.set = another.set;
+    }
+
+
+    ArrayList<String> getStudentNames()
+    {
+        ArrayList students = new ArrayList();
+        Iterator it = theList.iterator();
+        while (it.hasNext())
+        {
+            CandidateAssignment ca = (CandidateAssignment) it.next();
+            students.add(ca.getStudentEntry().getStudentName());
+        }
+        return students;
+    }
+
 
     /**
      * @param poorGuy
