@@ -74,10 +74,10 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
     }
 
     /**
-     * @return
+     * @return inverse of the energy score
      */
     public double getFitness(){
-        return 1/getEnergy();
+        return 1/(double)getEnergy();
     }
 
     @Override

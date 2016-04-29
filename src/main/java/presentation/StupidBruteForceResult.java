@@ -1,25 +1,28 @@
 package presentation;
 
-import com.google.gson.Gson;
+import model.CandidateAssignment;
 import model.Project;
 import model.Student;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Map.*;
 
 /**
  * StupidBruteForceResult
  */
-public class StupidBruteForceResult extends GsonSerialzable {
+public class StupidBruteForceResult extends GsonSerialzable implements Result {
     private final int cost;
-    private Map<Student,Project> plan;
+    private Vector<CandidateAssignment> assignments;
 
-    public StupidBruteForceResult(int cost, Map<Student,Project> arrangement) {
+    public StupidBruteForceResult(int cost, Map<Student,Project> map) {
         this.cost = cost;
-        plan = new HashMap<>();
-        if (arrangement != null) {
-            plan = arrangement;
+        assignments = new Vector<>();
+        if (map != null) {
+            for (Entry<Student,Project> e : map.entrySet()) {
+                CandidateAssignment a = new CandidateAssignment(e.getKey(), e
+                        .getValue());
+                assignments.add(a);
+            }
         }
     }
     @Override
@@ -30,5 +33,10 @@ public class StupidBruteForceResult extends GsonSerialzable {
     @Override
     public String toJson() {
         return GSON.toJson(this, StupidBruteForceResult.class);
+    }
+
+    @Override
+    public int energyScore() {
+        return cost;
     }
 }

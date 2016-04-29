@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 /**
  * GsonSerialzable:
  */
-public abstract class GsonSerialzable implements Result {
+public abstract class GsonSerialzable {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting()
             .create();
 }

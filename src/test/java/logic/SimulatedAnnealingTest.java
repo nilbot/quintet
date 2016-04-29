@@ -51,6 +51,8 @@ public class SimulatedAnnealingTest {
 
     @Test
     public void solve() throws Exception {
+        ((SimulatedAnnealing)SA).setIteration(1000);
+        ((SimulatedAnnealing)SA).setTimeout(10000);
         Result res = SA.Solve();
         System.out.println(res.toJson());
         assertTrue(res!=null);

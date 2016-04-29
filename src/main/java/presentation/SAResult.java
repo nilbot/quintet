@@ -1,25 +1,25 @@
 package presentation;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import model.CandidateAssignment;
 import model.ImprovableCandidateSolution;
-import model.DataSource;
 
 import java.util.Vector;
 
 /**
  * SAResult:
  */
-public class SAResult extends GsonSerialzable {
-    private final Vector<CandidateAssignment> pairs;
-    private double score;
+public class SAResult extends GsonSerialzable implements Result {
+    private final Vector<CandidateAssignment> assignments;
+    private final double fitness;
+    private final int energy;
+    private final int iterationPerformed;
 
-    public SAResult(ImprovableCandidateSolution singleton) {
-        pairs = new Vector<>();
-        for (CandidateAssignment assignment : singleton.listOfAssignments()) {
-            pairs.add(assignment);
-        }
+    public SAResult(ImprovableCandidateSolution solution, int run) {
+
+        assignments = new Vector<>(solution.listOfAssignments());
+        fitness = solution.getFitness();
+        energy = solution.getEnergy();
+        iterationPerformed = run;
     }
 
     @Override
@@ -30,5 +30,10 @@ public class SAResult extends GsonSerialzable {
     @Override
     public String toJson() {
         return GSON.toJson(this, SAResult.class);
+    }
+
+    @Override
+    public int energyScore() {
+        return energy;
     }
 }

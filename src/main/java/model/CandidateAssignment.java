@@ -18,6 +18,12 @@ public class CandidateAssignment extends GsonSerialzable {
 		this.assignedProject = this.student.getRandomPreference();
 	}
 
+	// Deterministic Constructor
+	public CandidateAssignment(Student s, Project p) {
+		this.student = s;
+		this.assignedProject = p;
+	}
+
 	/**
 	 * @param poorGuy
 	 */
@@ -63,7 +69,6 @@ public class CandidateAssignment extends GsonSerialzable {
 		return this.lastAssignedProject;
 	}
 
-	@Override
 	public String toJson() {
 		return GSON.toJson(this, CandidateAssignment.class);
 	}
