@@ -1,0 +1,13 @@
+language: java
+jdk:
+        - openjdk7
+before_cache:
+        - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+        directories:
+                - $HOME/.gradle/caches/
+                - $HOME/.gradle/wrapper/
+notifications:
+        slack:
+                rooms:
+                        secure: SIOUT9veRQqaEcYYe5Yz1AtYwXKjKSSGqYGZjbM3oqNag/oTU7zLJ6z2Zu0jGl7VKYUrFSomm9R/UrdHRFAKG+XPMkD1PZnaISj3gFB0y7lsKJyXe6IidB4hvOLlc38osg9PXDKPqaEcbJgRjbwJ2m6yMEQIpWuOzFivEHOje4BSgZokTopx1OuP1Z7dGyQLS/0T28riQ+OBt9sZ77PnGJvWeB+W0ZOobQDx0GKdyo8MxWAtZKe/9B5d8SHZCnHxM8QZZbpAauYfJPyrq7PE/DQMy01ILUKAdGl4sHYkEnye2nLN1aCZeVL1I5VyLWLDU0DDXYH8qYKwm3Cdjz0uab3/Wj9Xsoj5dB/LSUadsJi20bdDAi4RyHfjqVORuVLMKx89UR4biPdpz0sjaTNO0EzqJawIcaefkZDq9m5M1BZMpnLxs6Zl6VFFgV7ry5b6WjTd0hIWIlkTvFm+AGDuhZg9vEZNMK7XlBqan07DgnTQFJLEI0pQTHqX6Hv3rZwtTeibrtRYIBkU60GRgGLV9DIYAkgaYI680jQ2k3FvQYuUoAwDKIIegdBcQmc3rMJnVwaCy9jmCqQ7VTFQiQRmvfwkv+R+9lvYCSB41K2AFeBiAlTZoMLnrzmf+jBvz0KnYrB8FyRfePdXCNc73hqBTE3r1d569iXJXnuP3WOLqm4=
