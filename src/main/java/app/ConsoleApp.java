@@ -10,10 +10,6 @@ import presentation.*;
  */
 public class ConsoleApp {
     public static void main(String[] argv){
-
-        // TODO get config from argv
-        // Config configs = new Config("Memory", "logic.BruteForce");
-
         // Get Config from config resource file
         Config config = new Config();
         config.GetConfig();
@@ -28,6 +24,8 @@ public class ConsoleApp {
             System.err.println("Repo is not ready");
             return;
         }
+        System.out.println(repo.getMeta().toJson());
+
         Result res = solver.Solve();
 
         System.out.println(res.toJson());
