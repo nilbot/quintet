@@ -31,14 +31,7 @@ public class InputMeta extends GsonSerialzable {
                         .containsKey(p) ? projectFrequencies.get(p) : 0));
             }
         }
-        // step 2. calculate cumulative frequency distribution (cdf)
-        Map<Project,Integer> pCdf = new HashMap<>();
-        int cum = 0;
-        for (Project p : lp) {
-            cum += projectFrequencies.get(p);
-            pCdf.put(p, cum);
-        }
-        // step 3. sort frequency list
+        // step 2. sort frequency list
         freqListSorted = new ArrayList<>(projectFrequencies.keySet());
         Collections.sort(freqListSorted, new Comparator<Project>() {
             @Override
