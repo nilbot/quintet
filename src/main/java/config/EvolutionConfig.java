@@ -1,7 +1,6 @@
 package config;
 
 import logic.CombineConfig;
-import logic.Mutagen;
 import logic.Virus;
 
 /**

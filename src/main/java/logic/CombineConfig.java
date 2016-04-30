@@ -1,5 +1,7 @@
 package logic;
 
+import config.Mutagen;
+
 /**
  * CombineConfig:
  */

@@ -1,5 +1,6 @@
 package logic;
 
+import config.Mutagen;
 import model.GeneticCandidateSolution;
 
 /**
