@@ -33,6 +33,16 @@ public class SAResult extends AbstractResult implements Result {
     }
 
     @Override
+    public String getMeta() {
+        StringBuilder sb = new StringBuilder("{\n");
+        sb.append("\tenergyScore: "+energyScore()+",\n");
+        sb.append("\tfitness: "+fitness+",\n");
+        sb.append("\titerationPerformed: "+iterationPerformed+",\n");
+        sb.append("\tsolvingStrategy: "+solvingStrategy+",\n");
+        sb.append("}\n");
+        return sb.toString();
+    }
+
     public int energyScore() {
         return energyScore;
     }

@@ -1,5 +1,7 @@
 package model;
 
+import presentation.InputMeta;
+
 import java.util.*;
 
 /**
@@ -11,4 +13,6 @@ public interface DataSource {
     Set<Project> ProjectRepo() throws Exception;
     Map<String,Student> StudentRepo() throws Exception;
     boolean Ready();
+
+    InputMeta getMeta();
 }

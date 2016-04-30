@@ -54,7 +54,7 @@ public class SimulatedAnnealingTest {
         ((SimulatedAnnealing)SA).setIteration(1000);
         ((SimulatedAnnealing)SA).setTimeout(10000);
         Result res = SA.Solve();
-        System.out.println(res.toJson());
+        System.out.println(res.getMeta());
         assertTrue(res!=null);
     }
 

@@ -4,6 +4,7 @@ import model.DataSource;
 import model.Dodgy;
 import model.Project;
 import model.Student;
+import presentation.InputMeta;
 
 import java.util.*;
 
@@ -102,6 +103,15 @@ public class InMemoryRepo implements DataSource, Dodgy {
     @Override
     public boolean Ready() {
         return this.ready;
+    }
+
+    @Override
+    public InputMeta getMeta() {
+        if (!ready) {
+            throw new IllegalStateException("Repo not ready for query");
+        }
+        List<Student> ls = new ArrayList<>(StudentRepo().values());
+        return new InputMeta(ls,ProjectRepo());
     }
 
     @Override

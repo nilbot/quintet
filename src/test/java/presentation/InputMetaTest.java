@@ -34,7 +34,7 @@ public class InputMetaTest {
     }
     @Test
     public void toJson() throws Exception {
-        List<Student> ls = new ArrayList<Student>(data.StudentRepo().values());
+        List<Student> ls = new ArrayList<>(data.StudentRepo().values());
         InputMeta testObj = new InputMeta(ls, data.ProjectRepo());
         String expected = testObj.getHottestProject();
         String allRaw = testObj.toJson();

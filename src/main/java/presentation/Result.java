@@ -8,6 +8,6 @@ import com.google.gson.Gson;
 public interface Result {
     // toJson() return Stringified Json
     String toJson();
-    // energyScore
-    int energyScore();
+    // getMeta outputs meta information about the result
+    String getMeta();
 }

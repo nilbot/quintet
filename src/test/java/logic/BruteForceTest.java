@@ -6,6 +6,7 @@ import model.DataSource;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import presentation.InputMeta;
 import presentation.Result;
 
 import java.nio.file.Path;
@@ -65,10 +66,10 @@ public class BruteForceTest {
         Result res = bruteForce.Solve();
 
         System.out.printf("\n\nPermute all possible arrangements and " +
-                "calculate minimum cost of all used %d ms " +
+                "calculate minimum cost of all on the tidy dataset used %d ms" +
                 "\n----\n\n", System.currentTimeMillis() - begin);
-
-        System.out.println("Result of best arrangement: " + res);
+        System.out.println("Input meta:\n"+data.getMeta().getTlDr());
+        System.out.println("Result meta of best arrangement: " + res.getMeta());
         System.out.println("\n\n\n\n");
     }
 }

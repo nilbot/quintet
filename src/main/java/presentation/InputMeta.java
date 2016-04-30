@@ -50,4 +50,13 @@ public class InputMeta extends GsonSerialzable {
     public String getHottestProject() {
         return hottestProject;
     }
+
+    public String getTlDr() {
+        StringBuilder sb = new StringBuilder("{\n");
+        sb.append("\tNumberOfStudents: "+NumberOfStudents+",\n");
+        sb.append("\tNumberOfProjects: "+NumberOfProjects+",\n");
+        sb.append("\thottestProject: "+getHottestProject()+",\n");
+        sb.append("}\n");
+        return sb.toString();
+    }
 }

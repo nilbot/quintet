@@ -34,11 +34,25 @@ public class StupidBruteForceResult extends AbstractResult implements Result {
 
     @Override
     public String toJson() {
-        fitness = 1 / (double) energyScore;
+        updateFitness();
         return GSON.toJson(this, StupidBruteForceResult.class);
     }
 
+    private void updateFitness() {
+        fitness = 1 / (double) energyScore;
+    }
+
     @Override
+    public String getMeta() {
+        updateFitness();
+        StringBuilder sb = new StringBuilder("{\n");
+        sb.append("\tenergyScore: "+energyScore()+",\n");
+        sb.append("\tfitness: "+fitness+",\n");
+        sb.append("\tsolvingStrategy: "+solvingStrategy+",\n");
+        sb.append("}\n");
+        return sb.toString();
+    }
+
     public int energyScore() {
         return energyScore;
     }

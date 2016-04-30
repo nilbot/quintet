@@ -2,6 +2,7 @@ package data;
 
 import model.Project;
 import model.Student;
+import presentation.InputMeta;
 
 import java.util.*;
 
@@ -61,5 +62,10 @@ public class MockDataSource implements model.DataSource {
     @Override
     public boolean Ready() {
         return true;
+    }
+
+    @Override
+    public InputMeta getMeta() {
+        return null;
     }
 }
