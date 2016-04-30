@@ -9,7 +9,7 @@ import presentation.*;
  * ConsoleApp:
  */
 public class ConsoleApp {
-    public static void main(int argc, String[] argv){
+    public static void main(String[] argv){
 
         // TODO get config from argv
         // Config configs = new Config("Memory", "logic.BruteForce");
