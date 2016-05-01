@@ -1,6 +1,5 @@
 package config;
 
-import logic.CombineConfig;
 import logic.Virus;
 import model.DataSource;
 
@@ -26,7 +25,7 @@ public class EvolutionConfig {
         this.cullConfig = new CullConfig(killAmount, probablityToKillGoodGuys);
         Mutagen mutagen = new Virus();
         this.combineConfig = new CombineConfig(CombineConfig.NOBLE,
-                CombineConfig.MERGEBEST, mutagen);
+                CombineConfig.CROSSOVER, mutagen);
     }
     public int generationMax() {return generationMax;}
 

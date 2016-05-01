@@ -1,8 +1,13 @@
 package logic;
 
 import java.util.*;
+
+import config.CombineConfig;
 import data.GenePool;
+import model.CandidateAssignment;
 import model.GeneticCandidateSolution;
+
+import static model.service.UtilityService.TheRNG;
 
 /**
  * combine:
@@ -46,8 +51,8 @@ public class Combine implements Combinable {
                 case CombineConfig.MATRIARCH:
                     rst = wife;
                     break;
-                case CombineConfig.MERGEBEST:
-                    rst = mergeBest(husband, wife);
+                case CombineConfig.CROSSOVER:
+                    rst = crossover(husband, wife);
                     break;
                 case CombineConfig.PRIORITISE:
                     rst = prioritise(husband, wife);
@@ -55,7 +60,7 @@ public class Combine implements Combinable {
             }
 
             if (cfg.allowMutation()) {
-                rst = cfg.Mutagen().mutate(rst);
+                rst = cfg.Mutagen().mutate(rst, 1/(double)data.size());
             }
 
             if (rst == null) {
@@ -67,9 +72,19 @@ public class Combine implements Combinable {
     }
 
     private GeneticCandidateSolution
-    mergeBest(GeneticCandidateSolution father, GeneticCandidateSolution
+    crossover(GeneticCandidateSolution father, GeneticCandidateSolution
             mother) {
-        return null;
+        List<CandidateAssignment> lf = father.listOfAssignments();
+        List<CandidateAssignment> lm = new ArrayList<>();
+        for (CandidateAssignment ca : lf) {
+            lm.add(mother.getAssignmentFor(ca.getStudentEntry()
+                    .getStudentName()));
+        }
+        int pivot = TheRNG().nextInt(lf.size());
+        List<CandidateAssignment> fh = lf.subList(0, pivot);
+        List<CandidateAssignment> mh = lm.subList(pivot, lm.size());
+        GeneticCandidateSolution rst = new GeneticCandidateSolution(fh, mh);
+        return rst;
     }
     private GeneticCandidateSolution
     prioritise(GeneticCandidateSolution father, GeneticCandidateSolution

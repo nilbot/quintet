@@ -4,6 +4,8 @@ import model.CandidateAssignment;
 import model.CandidateSolution;
 import model.DataSource;
 
+import java.util.Collection;
+
 /**
  * ImprovableCandidateSolution:
  */
@@ -11,7 +13,7 @@ public class ImprovableCandidateSolution extends CandidateSolution {
     /**
      * @param prefs
      */
-    public ImprovableCandidateSolution(DataSource prefs) {
+    public ImprovableCandidateSolution(Collection<Student> prefs) {
         super(prefs);
     }
 

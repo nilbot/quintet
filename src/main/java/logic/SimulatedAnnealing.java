@@ -26,7 +26,7 @@ public class SimulatedAnnealing implements Solver {
     @Override
     public Result Solve() {
         ImprovableCandidateSolution singleton = new
-                ImprovableCandidateSolution(repo);
+                ImprovableCandidateSolution(repo.StudentRepo().values());
 
         int run = runTill(iteration, singleton);
 

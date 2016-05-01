@@ -4,6 +4,9 @@ import config.EvolutionConfig;
 import data.GenePool;
 import model.DataSource;
 import model.GeneticCandidateSolution;
+import model.Student;
+
+import java.util.Collection;
 
 /**
  * GeneticAlgorithm:
@@ -13,11 +16,11 @@ public class GeneticAlgorithm {
     private final EvolutionConfig config;
     private Cullable cullImplementor;
     private Combinable combineImplementor;
-    private final DataSource src;
+    private final Collection<Student> src;
 
     public GeneticAlgorithm(EvolutionConfig cfg) {
         this.genePool = new GenePool<>();
-        this.src = cfg.dataSrc();
+        this.src = cfg.dataSrc().StudentRepo().values();
         this.config = cfg;
         this.cullImplementor = new Cull();
         this.combineImplementor = new Combine();

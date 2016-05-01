@@ -1,4 +1,4 @@
-package logic;
+package config;
 
 import config.Mutagen;
 
@@ -15,7 +15,7 @@ public class CombineConfig {
     public static final int POOR = 8;
     public int Strategy;
     public static final int MATRIARCH = 1 << 4;
-    public static final int MERGEBEST = 2 << 4;
+    public static final int CROSSOVER = 2 << 4;
     public static final int PRIORITISE = 4 << 4;
     private boolean mutation = false;
 
@@ -24,6 +24,7 @@ public class CombineConfig {
             socialClass = 0;
         }
         Class = socialClass;
+        Strategy = strategy;
     }
     public CombineConfig(int socialClass, int strategy, Mutagen mutagen) {
         this(socialClass,strategy);

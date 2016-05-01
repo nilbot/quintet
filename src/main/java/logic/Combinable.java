@@ -1,5 +1,6 @@
 package logic;
 
+import config.CombineConfig;
 import data.GenePool;
 
 /**

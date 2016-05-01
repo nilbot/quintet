@@ -61,7 +61,7 @@ public class SimulatedAnnealingTest {
     @Test
     public void unrelated() throws Exception {
         ImprovableCandidateSolution object = new ImprovableCandidateSolution
-                (data);
+                (data.StudentRepo().values());
         ImprovableCandidateSolution before = object;
         if (object.improve()) {
             ImprovableCandidateSolution after = object;

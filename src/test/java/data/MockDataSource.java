@@ -27,13 +27,13 @@ public class MockDataSource implements model.DataSource {
     }
 
     @Override
-    public Student RandomStudent() throws Exception {
+    public Student RandomStudent() {
         // always return Jane Doe
         return theStudList.get(1);
     }
 
     @Override
-    public Student GetStudent(String studentName) throws Exception {
+    public Student GetStudent(String studentName) {
         switch (studentName) {
             case "John Doe":
                 return theStudList.get(0);
@@ -45,14 +45,14 @@ public class MockDataSource implements model.DataSource {
     }
 
     @Override
-    public Set<Project> ProjectRepo() throws Exception {
+    public Set<Project> ProjectRepo() {
         return new HashSet<>(Arrays.asList(new Project[] {new Project("Mock " +
                 "Project One"), new Project("Mock Project Two"),
                  new Project("Mock Project Three")}));
     }
 
     @Override
-    public Map<String, Student> StudentRepo() throws Exception {
+    public Map<String, Student> StudentRepo() {
         HashMap<String, Student> rst = new HashMap<>();
         rst.put("John Doe", theStudList.get(0));
         rst.put("Jane Doe", theStudList.get(1));

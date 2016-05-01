@@ -6,5 +6,6 @@ import model.GeneticCandidateSolution;
  * Mutagen:
  */
 public interface Mutagen {
-    GeneticCandidateSolution mutate(GeneticCandidateSolution original);
+    GeneticCandidateSolution mutate(GeneticCandidateSolution original, double
+            mutatioinProbability);
 }
