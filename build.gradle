@@ -24,7 +24,7 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'app.ConsoleApp'
+        attributes 'Main-Class': 'app.WSApp'
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }

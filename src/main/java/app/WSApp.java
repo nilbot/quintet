@@ -5,10 +5,8 @@ import org.glassfish.tyrus.client.ClientManager;
 
 import javax.websocket.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +15,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class WSApp {
     private static CountDownLatch messageLatch;
-    private static final String SENT_MESSAGE = "Hello World";
+    private static final WSMessage SENT_MESSAGE = new WSMessage() {
+        @Override
+        public String toJson() {
+            this.MessageType = "Hello World";
+            return GSON.toJson(this,WSMessage.class);
+        }
+    };
 
     public static void main(String[] args) {
         messageLatch = new CountDownLatch(1);
@@ -36,7 +40,7 @@ public class WSApp {
                                 messageLatch.countDown();
                             }
                         });
-                        session.getBasicRemote().sendText(SENT_MESSAGE);
+                        session.getBasicRemote().sendText(SENT_MESSAGE.toJson());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
