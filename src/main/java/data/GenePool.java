@@ -6,7 +6,6 @@ import static model.service.UtilityService.TheRNG;
 
 public class GenePool<E> {
     private TreeSet<E> pool;
-    private Stack<E> backup;
 
     public void addToPool(E solution){
         if(!pool.contains(solution)){
@@ -19,8 +18,7 @@ public class GenePool<E> {
     public int size(){ return pool.size(); }
 
     public E getWorst() {
-        backup.push(pool.pollLast());
-        return backup.peek();
+        return pool.pollLast();
     }
 
     public E peekWorst() {
@@ -28,106 +26,138 @@ public class GenePool<E> {
     }
 
     public E getBest(){
-        backup.push(pool.pollFirst());
-        return backup.peek();
+        return pool.pollFirst();
     }
 
     public E peekBest() {
         return pool.first();
     }
 
-    public void undo(){
-        while (!backup.empty()) {
-            E b = backup.pop();
-            if (!pool.contains(b)) {
-                pool.add(b);
-            }
-        }
-    }
-
     public List<E> getCoupleFromTop25Percent() {
         List<E> rst = new ArrayList<>();
         int sz = size();
-        int cutoff = sz/4;
-        int husband = TheRNG().nextInt(cutoff);
-        int wife = TheRNG().nextInt(cutoff);
-        int idx = 0;
-        Iterator<E> i = pool.iterator();
-        while (i.hasNext() && idx++ < cutoff) {
-            E o = i.next();
-            if (idx == husband) {
-                rst.add(o);
-            } else if (idx == wife) {
-                rst.add(o);
-            }
+        if (sz < 2) {
+            throw new RuntimeException("genePool has only 1 item");
         }
+        int cutoff = sz/4;
+        TreeSet<Integer> pair = new TreeSet<>();
+        while(pair.size() < 2) {
+            pair.add(TheRNG().nextInt(cutoff));
+        }
+        // use the values in cullIndex to cull elements in the genepool
+        Iterator<Integer> ci = pair.iterator();
+        Iterator<E> pi = pool.iterator();
+        int currVal = ci.next();
+        int i = 0;
 
+        while (pi.hasNext()) {
+            // only retrieve the iterator value once at the start of the loop
+            E item = pi.next();
+            if (i == currVal) {
+                rst.add(item);
+                if (ci.hasNext()) {
+                    currVal = ci.next();
+                } else { break; }
+            }
+            i++;
+        }
         return rst;
     }
 
     public List<E> getCoupleFromBottom25Percent() {
         List<E> rst = new ArrayList<>();
         int sz = size();
-        int cutoff = sz/4;
-        int husband = TheRNG().nextInt(cutoff);
-        int wife = TheRNG().nextInt(cutoff);
-        int idx = 0;
-        Iterator<E> i = pool.descendingIterator();
-        while (i.hasNext() && idx++ < cutoff) {
-            E o = i.next();
-            if (idx == husband) {
-                rst.add(o);
-            } else if (idx == wife) {
-                rst.add(o);
-            }
+        if (sz < 2) {
+            throw new RuntimeException("genePool has only 1 item");
         }
+        int cutoff = sz/4;
+        TreeSet<Integer> pair = new TreeSet<>();
+        while(pair.size() < 2) {
+            pair.add(TheRNG().nextInt(sz-cutoff,sz));
+        }
+        // use the values in cullIndex to cull elements in the genepool
+        Iterator<Integer> ci = pair.iterator();
+        Iterator<E> pi = pool.iterator();
+        int currVal = ci.next();
+        int i = 0;
 
+        while (pi.hasNext()) {
+            // only retrieve the iterator value once at the start of the loop
+            E item = pi.next();
+            if (i == currVal) {
+                rst.add(item);
+                if (ci.hasNext()) {
+                    currVal = ci.next();
+                } else { break; }
+            }
+            i++;
+        }
         return rst;
     }
 
     public List<E> getCoupleFromMiddle50Percent() {
         List<E> rst = new ArrayList<>();
         int sz = size();
-        int minCutoff = sz/4;
-        int maxCutoff = sz - minCutoff;
-        int husband = TheRNG().nextInt(minCutoff,maxCutoff);
-        int wife = TheRNG().nextInt(minCutoff,maxCutoff);
-        int idx = 0;
-        Iterator<E> i = pool.iterator();
-        while (i.hasNext() && idx++ < maxCutoff-minCutoff) {
-            E o = i.next();
-            if (idx == husband) {
-                rst.add(o);
-            } else if (idx == wife) {
-                rst.add(o);
-            }
+        if (sz < 2) {
+            throw new RuntimeException("genePool has only 1 item");
         }
+        int cutoff = sz/4;
+        TreeSet<Integer> pair = new TreeSet<>();
+        while(pair.size() < 2) {
+            pair.add(TheRNG().nextInt(cutoff,sz-cutoff));
+        }
+        // use the values in cullIndex to cull elements in the genepool
+        Iterator<Integer> ci = pair.iterator();
+        Iterator<E> pi = pool.iterator();
+        int currVal = ci.next();
+        int i = 0;
 
+        while (pi.hasNext()) {
+            // only retrieve the iterator value once at the start of the loop
+            E item = pi.next();
+            if (i == currVal) {
+                rst.add(item);
+                if (ci.hasNext()) {
+                    currVal = ci.next();
+                } else { break; }
+            }
+            i++;
+        }
         return rst;
     }
 
     public List<E> getRandomCouple() {
         List<E> rst = new ArrayList<>();
         int sz = size();
-
-        int husband = TheRNG().nextInt(sz);
-        int wife = TheRNG().nextInt(sz);
-        int idx = 0;
-        Iterator<E> i = pool.iterator();
-        while (i.hasNext() && idx++ < sz) {
-            E o = i.next();
-            if (idx == husband) {
-                rst.add(o);
-            } else if (idx == wife) {
-                rst.add(o);
-            }
+        if (sz < 2) {
+            throw new RuntimeException("genePool has only 1 item");
         }
+        int cutoff = sz/4;
+        TreeSet<Integer> pair = new TreeSet<>();
+        while(pair.size() < 2) {
+            pair.add(TheRNG().nextInt(sz));
+        }
+        // use the values in cullIndex to cull elements in the genepool
+        Iterator<Integer> ci = pair.iterator();
+        Iterator<E> pi = pool.iterator();
+        int currVal = ci.next();
+        int i = 0;
 
+        while (pi.hasNext()) {
+            // only retrieve the iterator value once at the start of the loop
+            E item = pi.next();
+            if (i == currVal) {
+                rst.add(item);
+                if (ci.hasNext()) {
+                    currVal = ci.next();
+                } else { break; }
+            }
+            i++;
+        }
         return rst;
     }
 
     public GenePool() {
-        this.pool = new TreeSet<>(Collections.reverseOrder());
-        this.backup = new Stack<>();
+        this.pool = new TreeSet<>();
     }
 }

@@ -2,9 +2,7 @@ package app;
 
 import config.*;
 import data.TSVReader;
-import logic.BruteForce;
-import logic.SimulatedAnnealing;
-import logic.Solver;
+import logic.*;
 import model.DataSource;
 import data.InMemoryRepo;
 
@@ -74,6 +72,15 @@ public class Config {
             case SimulatedAnnealing:
                 return getSimulatedAnnealing();
             case GeneticAlgorithm:
+                CullConfig cullcfg =new CullConfig(200, 0.02);
+                Mutagen mutagen = new Virus();
+                CombineConfig combinecfg = new CombineConfig(
+                        CombineConfig.NOBLE,
+                        CombineConfig.CROSSOVER,
+                        mutagen);
+                EvolutionConfig ecfg = new EvolutionConfig(100, 3000, cullcfg,
+                        combinecfg);
+                return getGeneticAlgorithm(ecfg);
             default:
                 throw new UnsupportedOperationException("Not implemented");
         }
@@ -95,4 +102,9 @@ public class Config {
         return new BruteForce();
     }
     private Solver getSimulatedAnnealing() { return new SimulatedAnnealing(); }
+    private Solver getGeneticAlgorithm(EvolutionConfig ecfg) {
+        GeneticAlgorithm rst = new GeneticAlgorithm(ecfg);
+        rst.InjectData(GetData());
+        return rst;
+    }
 }

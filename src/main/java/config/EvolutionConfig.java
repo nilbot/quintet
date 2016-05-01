@@ -8,24 +8,16 @@ import model.DataSource;
  */
 public class EvolutionConfig {
     public final CombineConfig combineConfig;
-    private final int killAmount;
-    private final double probablityToKillGoodGuys;
     public final CullConfig cullConfig;
     private final int generationMax;
     private final int populationSize;
-    private final DataSource repo;
 
-    public EvolutionConfig(int iters, int popSz, int killCount, double
-            indiscriminateKilling, DataSource repo) {
-        this.generationMax = 100;
-        this.populationSize = 3000;
-        this.probablityToKillGoodGuys = 0.2;
-        this.killAmount = 200;
-        this.repo = repo;
-        this.cullConfig = new CullConfig(killAmount, probablityToKillGoodGuys);
-        Mutagen mutagen = new Virus();
-        this.combineConfig = new CombineConfig(CombineConfig.NOBLE,
-                CombineConfig.CROSSOVER, mutagen);
+    public EvolutionConfig(int iters, int popSz, CullConfig cullcfg, CombineConfig
+            combinecfg) {
+        this.generationMax = iters;
+        this.populationSize = popSz;
+        this.cullConfig = cullcfg;
+        this.combineConfig = combinecfg;
     }
     public int generationMax() {return generationMax;}
 
@@ -33,7 +25,4 @@ public class EvolutionConfig {
         return populationSize;
     }
 
-    public DataSource dataSrc() {
-        return repo;
-    }
 }

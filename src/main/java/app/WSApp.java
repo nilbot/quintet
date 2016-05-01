@@ -49,6 +49,12 @@ public class WSApp {
 
         sendMeta(meta);
         sendResult(res);
+
+        Config cfg = new Config("Memory","input.tsv","GeneticAlgorithm");
+        Solver ga = cfg.GetSolver();
+        Result rst = ga.Solve();
+
+        sendResult(rst);
     }
     private static void sendMeta(final InputMeta meta) {
         messageLatch = new CountDownLatch(1);

@@ -83,13 +83,7 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
 
     @Override
     public int compareTo(CandidateSolution o) {
-        if (this.getFitness() < o.getFitness()) {
-            return -1;
-        }
-        if (this.getFitness() > o.getFitness()) {
-            return 1;
-        }
-        return 0;
+        return this.getEnergy() - o.getEnergy();
     }
 
     public final List<CandidateAssignment> listOfAssignments() {return theList;}

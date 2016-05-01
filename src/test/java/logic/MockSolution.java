@@ -12,11 +12,11 @@ public class MockSolution implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        int score = ((MockSolution) o).getFitness();
-        if (this.getFitness() < score) {
+        int score = ((MockSolution) o).getEnergy();
+        if (this.getEnergy() < score) {
             return -1;
         }
-        if (this.getFitness() > score) {
+        if (this.getEnergy() > score) {
             return 1;
         }
         return 0;
@@ -32,7 +32,7 @@ public class MockSolution implements Comparable {
         }
     }
 
-    public int getFitness() {
+    public int getEnergy() {
         int rst = 0;
         for (int i = 0; i < numberOfAssignments; i++) {
             rst += theList.get(i).getFitness() * (1 << numberOfAssignments * i);

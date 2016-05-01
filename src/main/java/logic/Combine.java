@@ -15,9 +15,10 @@ import static model.service.UtilityService.TheRNG;
 public class Combine implements Combinable {
     @Override
     public GenePool
-    combine(CombineConfig cfg, GenePool data, int nChild) {
-        while (nChild-- >= 0) {
-            List<GeneticCandidateSolution> parents;
+    combine(CombineConfig cfg, GenePool<GeneticCandidateSolution> data, int nChild) {
+        int originalSz = data.size();
+        while (data.size() < originalSz+nChild) {
+            List<GeneticCandidateSolution> parents = new ArrayList<>();
             GeneticCandidateSolution husband = null;
             GeneticCandidateSolution wife = null;
             switch (cfg.Class) {
@@ -37,8 +38,8 @@ public class Combine implements Combinable {
                     wife = parents.get(1);
                     break;
                 case CombineConfig.ELITE:
-                    husband = (GeneticCandidateSolution) data.getBest();
-                    wife = (GeneticCandidateSolution) data.getBest();
+                    husband = data.getBest();
+                    wife =  data.getBest();
                     break;
                 case CombineConfig.RANDOM:
                     parents = data.getRandomCouple();
@@ -48,9 +49,6 @@ public class Combine implements Combinable {
             }
             GeneticCandidateSolution rst = null;
             switch (cfg.Strategy) {
-                case CombineConfig.MATRIARCH:
-                    rst = wife;
-                    break;
                 case CombineConfig.CROSSOVER:
                     rst = crossover(husband, wife);
                     break;
@@ -74,15 +72,29 @@ public class Combine implements Combinable {
     protected GeneticCandidateSolution
     crossover(GeneticCandidateSolution father, GeneticCandidateSolution
             mother) {
+        if (father==null){
+            throw new RuntimeException("father null");
+        }
+        if (mother == null) {
+            throw new RuntimeException("mother null");
+        }
         List<CandidateAssignment> lf = father.listOfAssignments();
+        if (lf == null || lf.size() == 0) {
+            throw new RuntimeException("lf null");
+        }
         List<CandidateAssignment> lm = new ArrayList<>();
         for (CandidateAssignment ca : lf) {
-            lm.add(mother.getAssignmentFor(ca.getStudentEntry()
-                    .getStudentName()));
+            CandidateAssignment as = mother.getAssignmentFor(ca.getStudentEntry().getStudentName());
+            lm.add(as);
         }
         int pivot = TheRNG().nextInt(lf.size());
         List<CandidateAssignment> fh = lf.subList(0, pivot);
         List<CandidateAssignment> mh = lm.subList(pivot, lm.size());
+        if (fh.size()+mh.size()!=lf.size()){
+            throw new RuntimeException(String.format("pivot split merge sz " +
+                    "incorret %d, " +
+                    "want %d",fh.size()+mh.size(),lf.size()));
+        }
         GeneticCandidateSolution rst = new GeneticCandidateSolution(fh, mh);
         return rst;
     }
