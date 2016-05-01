@@ -6,8 +6,7 @@ import model.*;
 /**
  * InputMeta:
  */
-public class InputMeta extends GsonSerialzable {
-    private final String MessageType = "InputMeta";
+public class InputMeta extends WSMessage {
     private final int NumberOfStudents;
     private final int NumberOfProjects;
     private final String hottestProject;
@@ -15,6 +14,7 @@ public class InputMeta extends GsonSerialzable {
     private final Map<Project, Integer> projectFrequencies;
 
     public InputMeta(List<Student> ls, Set<Project> lp) {
+        MessageType = "InputMeta";
         int ns = ls.size();
         int np = lp.size();
         NumberOfStudents = ns;

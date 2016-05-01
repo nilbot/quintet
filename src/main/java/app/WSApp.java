@@ -1,7 +1,12 @@
 package app;
 
 
+import logic.Solver;
+import model.DataSource;
 import org.glassfish.tyrus.client.ClientManager;
+import presentation.InputMeta;
+import presentation.Result;
+import presentation.WSMessage;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -24,6 +29,95 @@ public class WSApp {
     };
 
     public static void main(String[] args) {
+        Config config = new Config();
+        config.GetConfig();
+
+        // init data store
+        DataSource repo = config.GetData();
+
+        Solver solver = config.GetSolver();
+        if (repo.Ready()) {
+            solver.InjectData(repo);
+        } else {
+            System.err.println("Repo is not ready");
+            return;
+        }
+        final InputMeta meta = repo.getMeta();
+        final Result res = solver.Solve();
+
+        helloWorld();
+
+        final ClientEndpointConfig cec = ClientEndpointConfig.Builder.create
+                ().build();
+        ClientManager metaWS = new ClientManager().createClient();
+        Endpoint metaEndpoint = new Endpoint() {
+            @Override
+            public void onOpen(Session session, EndpointConfig config) {
+                try {
+                    session.addMessageHandler(new MessageHandler.Whole<String>
+                            () {
+                        @Override
+                        public void onMessage(String message) {
+                            throw new IllegalStateException(String.format("I " +
+                                    "should never receive anything: %v",
+                                    message));
+                        }
+                    });
+                    session.getBasicRemote().sendText(meta.toJson());
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        try {
+            metaWS.connectToServer(metaEndpoint, cec, new URI("ws://127.0.0" +
+                    ".1:8080/meta"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DeploymentException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        ClientManager resultWS = new ClientManager().createClient();
+        Endpoint resEndpoint = new Endpoint() {
+            @Override
+            public void onOpen(Session session, EndpointConfig config) {
+                try {
+                    session.addMessageHandler(new MessageHandler.Whole<String>
+                            () {
+                        @Override
+                        public void onMessage(String message) {
+                            throw new IllegalStateException(String.format("I " +
+                                            "should never receive anything: %v",
+                                    message));
+                        }
+                    });
+                    session.getBasicRemote().sendText(res.toJson());
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        try {
+            resultWS.connectToServer(resEndpoint, cec, new URI("ws://127.0.0" +
+                    ".1:8080/meta"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DeploymentException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private static void helloWorld() {
         messageLatch = new CountDownLatch(1);
         final ClientEndpointConfig cec = ClientEndpointConfig.Builder.create
                 ().build();
@@ -56,6 +150,5 @@ public class WSApp {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }
