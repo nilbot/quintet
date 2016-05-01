@@ -59,18 +59,14 @@ public class WSApp {
             ws.connectToServer(new Endpoint() {
                 @Override
                 public void onOpen(Session session, EndpointConfig config) {
-                    try {
-                        session.addMessageHandler(new MessageHandler.Whole<String>() {
-                            @Override
-                            public void onMessage(String message) {
-                                System.out.println("rx: " + message);
-                                messageLatch.countDown();
-                            }
-                        });
-                        session.getBasicRemote().sendText(meta.toJson());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    session.addMessageHandler(new MessageHandler.Whole<String>() {
+                        @Override
+                        public void onMessage(String message) {
+                            System.out.println("rx: " + message);
+                            messageLatch.countDown();
+                        }
+                    });
+                    session.getAsyncRemote().sendText(meta.toJson());
                 }
             }, cec, new URI("ws://localhost:8080/meta"));
             messageLatch.await(100, TimeUnit.SECONDS);
@@ -93,18 +89,14 @@ public class WSApp {
             ws.connectToServer(new Endpoint() {
                 @Override
                 public void onOpen(Session session, EndpointConfig config) {
-                    try {
-                        session.addMessageHandler(new MessageHandler.Whole<String>() {
-                            @Override
-                            public void onMessage(String message) {
-                                System.out.println("rx: " + message);
-                                messageLatch.countDown();
-                            }
-                        });
-                        session.getBasicRemote().sendText(res.toJson());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    session.addMessageHandler(new MessageHandler.Whole<String>() {
+                        @Override
+                        public void onMessage(String message) {
+                            System.out.println("rx: " + message);
+                            messageLatch.countDown();
+                        }
+                    });
+                    session.getAsyncRemote().sendText(res.toJson());
                 }
             }, cec, new URI("ws://localhost:8080/result"));
             messageLatch.await(100, TimeUnit.SECONDS);
