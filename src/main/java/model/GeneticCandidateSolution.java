@@ -20,8 +20,12 @@ public class GeneticCandidateSolution extends CandidateSolution {
     }
 
     public GeneticCandidateSolution(List<CandidateAssignment> fh, List<CandidateAssignment> mh) {
-        set = new HashSet<>();
-        theList = new ArrayList<>(fh);
+        this(fh);
         theList.addAll(mh);
+    }
+
+    public GeneticCandidateSolution(List<CandidateAssignment> rstList) {
+        set = new HashSet<>();
+        theList = new ArrayList<>(rstList);
     }
 }

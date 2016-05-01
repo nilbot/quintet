@@ -69,7 +69,7 @@ public class BruteForceTest {
                 "calculate minimum cost of all on the tidy dataset used %d ms" +
                 "\n----\n\n", System.currentTimeMillis() - begin);
         System.out.println("Input meta:\n"+data.getMeta().getTlDr());
-        System.out.println("Result meta of best arrangement: " + res.getMeta());
+        System.out.println("Result meta of sift arrangement: " + res.getMeta());
         System.out.println("\n\n\n\n");
     }
 }

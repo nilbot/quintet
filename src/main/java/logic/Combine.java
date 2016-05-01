@@ -54,8 +54,8 @@ public class Combine implements Combinable {
                 case CombineConfig.CROSSOVER:
                     rst = crossover(husband, wife);
                     break;
-                case CombineConfig.PRIORITISE:
-                    rst = prioritise(husband, wife);
+                case CombineConfig.SIFT:
+                    rst = sift(husband, wife);
                     break;
             }
 
@@ -87,8 +87,28 @@ public class Combine implements Combinable {
         return rst;
     }
     protected GeneticCandidateSolution
-    prioritise(GeneticCandidateSolution father, GeneticCandidateSolution
+    sift(GeneticCandidateSolution father, GeneticCandidateSolution
             mother) {
-        return null;
+        int scoreFather = father.getEnergy();
+        int scoreMother = mother.getEnergy();
+        List<CandidateAssignment> lf = father.listOfAssignments();
+        List<CandidateAssignment> lm = new ArrayList<>();
+        for (CandidateAssignment ca : lf) {
+            lm.add(mother.getAssignmentFor(ca.getStudentEntry()
+                    .getStudentName()));
+        }
+        List<CandidateAssignment> rstList = new ArrayList<>();
+        for (int idx = 0; idx < lf.size(); idx++) {
+            CandidateAssignment af = lf.get(idx);
+            int prevf = af.getEnergy();
+            CandidateAssignment am = lm.get(idx);
+            int prevm = am.getEnergy();
+            rstList.add(prevf < prevm ? af : am);
+        }
+        GeneticCandidateSolution rst = new GeneticCandidateSolution(rstList);
+        int scoreOff = rst.getEnergy();
+
+        if (scoreOff < scoreFather || scoreOff < scoreMother) return rst;
+        else return scoreFather < scoreMother? father:mother;
     }
 }

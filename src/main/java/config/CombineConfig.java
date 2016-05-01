@@ -16,7 +16,7 @@ public class CombineConfig {
     public int Strategy;
     public static final int MATRIARCH = 1 << 4;
     public static final int CROSSOVER = 2 << 4;
-    public static final int PRIORITISE = 4 << 4;
+    public static final int SIFT = 4 << 4;
     private boolean mutation = false;
 
     public CombineConfig(int socialClass, int strategy){
