@@ -28,7 +28,7 @@ public class ImprovableCandidateSolutionTest {
             e.printStackTrace();
         }
         TheRNG().setSeed(124);
-        testSol = new ImprovableCandidateSolution(data);
+        testSol = new ImprovableCandidateSolution(data.StudentRepo().values());
     }
 
     @Test

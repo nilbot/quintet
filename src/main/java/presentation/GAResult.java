@@ -1,26 +1,28 @@
 package presentation;
 
 import model.CandidateAssignment;
+import model.GeneticCandidateSolution;
 import model.ImprovableCandidateSolution;
 
 import java.util.Vector;
 
 /**
- * SAResult:
+ * GAResult:
  */
-public class SAResult extends AbstractResult implements Result {
+public class GAResult extends AbstractResult implements Result {
+    public GAResult(GeneticCandidateSolution rst, int run) {
+        assignments = new Vector<>(rst.listOfAssignments());
+        solvingStrategy = "Genetic Algorithm";
+        fitness = rst.getFitness();
+        energyScore = rst.getEnergy();
+        iterationPerformed = run;
+    }
+
     private final Vector<CandidateAssignment> assignments;
     private final double fitness;
     private final int energyScore;
     private final int iterationPerformed;
 
-    public SAResult(ImprovableCandidateSolution solution, int run) {
-        solvingStrategy = "Simulated Annealing";
-        assignments = new Vector<>(solution.listOfAssignments());
-        fitness = solution.getFitness();
-        energyScore = solution.getEnergy();
-        iterationPerformed = run;
-    }
 
     @Override
     public String toString() {
@@ -29,7 +31,7 @@ public class SAResult extends AbstractResult implements Result {
 
     @Override
     public String toJson() {
-        return GSON.toJson(this, SAResult.class);
+        return GSON.toJson(this, GAResult.class);
     }
 
     @Override

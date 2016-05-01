@@ -1,9 +1,12 @@
+package logic;
+
 import app.Config;
 import logic.Solver;
 import model.DataSource;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import presentation.InputMeta;
 import presentation.Result;
 
 import java.nio.file.Path;
@@ -57,16 +60,16 @@ public class BruteForceTest {
 
     @Test
     public void testDryRun() throws Exception {
-//        long begin = System.currentTimeMillis();
-//        System.out.printf("Test generation cost %d ms \n",System.currentTimeMillis() - begin);
-
         setup();
         long begin = System.currentTimeMillis();
 
         Result res = bruteForce.Solve();
 
-        System.out.printf("Permute all possible arrangements cost %d ms \n\n----\n", System.currentTimeMillis() - begin);
-        System.out.println("Result of best arrangement: " + res);
-        System.out.printf("min cost %d ms", System.currentTimeMillis() - begin);
+        System.out.printf("\n\nPermute all possible arrangements and " +
+                "calculate minimum cost of all on the tidy dataset used %d ms" +
+                "\n----\n\n", System.currentTimeMillis() - begin);
+        System.out.println("Input meta:\n"+data.getMeta().getTlDr());
+        System.out.println("Result meta of sift arrangement: " + res.getMeta());
+        System.out.println("\n\n\n\n");
     }
 }

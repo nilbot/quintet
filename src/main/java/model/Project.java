@@ -5,17 +5,17 @@ package model;
  * String.intern() fiasco.
  */
 public class Project {
-    private String internal;
+    private String projectName;
     public Project(String text) {
-        this.internal = text.intern();
+        this.projectName = text.intern();
     }
     @Override
     public int hashCode() {
-        return this.internal.hashCode();
+        return this.projectName.hashCode();
     }
     @Override
     public String toString() {
-        return this.internal;
+        return this.projectName;
     }
     @Override
     public boolean equals(Object obj) {

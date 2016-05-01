@@ -11,6 +11,10 @@ import presentation.SAResult;
  */
 public class SimulatedAnnealing implements Solver {
     private DataSource repo;
+    //default timeout 10 seconds
+    private int timeout = 10000;
+    //default iterations 1000
+    private int iteration = 1000;
 
     @Override
     public void InjectData(DataSource repo) {
@@ -22,20 +26,33 @@ public class SimulatedAnnealing implements Solver {
     @Override
     public Result Solve() {
         ImprovableCandidateSolution singleton = new
-                ImprovableCandidateSolution(repo);
+                ImprovableCandidateSolution(repo.StudentRepo().values());
 
-        // some threshold
-        long timeOut = 50;
-        runTill(timeOut, singleton);
+        int run = runTill(iteration, singleton);
 
-        SAResult res = new SAResult(singleton, repo);
+        SAResult res = new SAResult(singleton, iteration - run);
         return res;
     }
 
-    private void runTill(long timeOut, ImprovableCandidateSolution singleton) {
-        // either iteration reaches 0 or solution can't be improved.
-        while (timeOut >= 0 && singleton.improve()) {
-            timeOut--;
+    private int runTill(int iteration,
+                         ImprovableCandidateSolution singleton) {
+        // either iteration reaches 0 or solution can't be improved with in
+        // timeout.
+        long begin = System.currentTimeMillis();
+        while (iteration-- >= 0 && !timedOut(begin)) {
+            singleton.improve();
         }
+        return iteration;
+    }
+
+    public void setTimeout(int t){
+        this.timeout = t;
+    }
+    public void setIteration(int i) {
+        this.iteration = i;
+    }
+
+    private boolean timedOut(long start) {
+        return System.currentTimeMillis() > start + timeout;
     }
 }

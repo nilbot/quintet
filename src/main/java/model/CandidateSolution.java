@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static model.service.UtilityService.TheRNG;
 
@@ -12,19 +9,23 @@ import static model.service.UtilityService.TheRNG;
  */
 public class CandidateSolution implements Comparable<CandidateSolution> {
     private static final int penalty = 1000;
-    private final DataSource prefs;
-    private List<CandidateAssignment> theList;
-    private Set<Project> set;
+    private final Collection<Student> prefs;
+    protected List<CandidateAssignment> theList;
+    protected Set<Project> set;
+
+    // extremely dangerous, but
+    // don't have time to redesign. so, whatever.
+    protected CandidateSolution() {prefs = null;}
 
 
     /**
      * @param prefs
      */
-    public CandidateSolution(DataSource prefs) {
+    public CandidateSolution(Collection<Student> prefs) {
         this.prefs = prefs;
         this.theList = new ArrayList<CandidateAssignment>();
         try {
-            for (Student student : prefs.StudentRepo().values()) {
+            for (Student student : prefs) {
                 this.theList.add(new CandidateAssignment(student));
             }
         } catch (Exception e) {
@@ -74,20 +75,16 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
     }
 
     /**
-     * @return
+     * @return inverse of the energy score
      */
     public double getFitness(){
-        return 1/getEnergy();
+        return 1/(double)getEnergy();
     }
 
     @Override
     public int compareTo(CandidateSolution o) {
-        if (this.getFitness() < o.getFitness()) {
-            return -1;
-        }
-        if (this.getFitness() > o.getFitness()) {
-            return 1;
-        }
-        return 0;
+        return this.getEnergy() - o.getEnergy();
     }
+
+    public final List<CandidateAssignment> listOfAssignments() {return theList;}
 }

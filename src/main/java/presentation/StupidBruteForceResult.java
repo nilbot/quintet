@@ -1,53 +1,59 @@
 package presentation;
 
-import com.google.gson.Gson;
+import model.CandidateAssignment;
 import model.Project;
 import model.Student;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Map.*;
 
-/** TODO DON'T EXTEND ME OR COPY PASTE ME, YOU R DOING IT WRONG, GOOGLE PROPER
- *  TODO SERIALIZATION EXAMPLE
+/**
  * StupidBruteForceResult
  */
-public class StupidBruteForceResult implements Result{
-    private final int cost;
-    private Map<Student,Project> plan;
+public class StupidBruteForceResult extends AbstractResult implements Result {
+    private final int energyScore;
+    private double fitness;
+    private Vector<CandidateAssignment> assignments;
 
-    public StupidBruteForceResult(int cost, Map<Student,Project> arrangement) {
-        this.cost = cost;
-        int len = arrangement.size();
-        plan = new HashMap<>();
-        if (arrangement != null) {
-            plan = arrangement;
+    public StupidBruteForceResult(int energyScore, Map<Student,Project> map) {
+        solvingStrategy = "Brute Force";
+        this.energyScore = energyScore;
+        assignments = new Vector<>();
+        if (map != null) {
+            for (Entry<Student,Project> e : map.entrySet()) {
+                CandidateAssignment a = new CandidateAssignment(e.getKey(), e
+                        .getValue());
+                assignments.add(a);
+            }
         }
     }
     @Override
     public String toString() {
-        return String();
+        return toJson();
     }
 
     @Override
-    public Gson JSON() {
-        return null;
+    public String toJson() {
+        updateFitness();
+        return GSON.toJson(this, StupidBruteForceResult.class);
+    }
+
+    private void updateFitness() {
+        fitness = 1 / (double) energyScore;
     }
 
     @Override
-    public String String() {
-        return "\"cost\": " + this.cost + ", \"plan\": {" + serialize(plan) +
-                "\n}";
-    }
-
-    private String serialize(Map<Student, Project> plan) {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Student,Project> key : plan.entrySet()) {
-            Project p = key.getValue();
-            sb.append("\"" + key.getKey().getStudentName() + "\": { \"");
-            sb.append(p);
-            sb.append("\",");
-        }
+    public String getMeta() {
+        updateFitness();
+        StringBuilder sb = new StringBuilder("{\n");
+        sb.append("\tenergyScore: "+energyScore()+",\n");
+        sb.append("\tfitness: "+fitness+",\n");
+        sb.append("\tsolvingStrategy: "+solvingStrategy+",\n");
+        sb.append("}\n");
         return sb.toString();
+    }
+
+    public int energyScore() {
+        return energyScore;
     }
 }

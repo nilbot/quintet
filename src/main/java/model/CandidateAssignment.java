@@ -1,28 +1,34 @@
 package model;
 
-import model.Project;
-import model.Student;
+import presentation.GsonSerialzable;
 
 /**
  *
  */
-public class CandidateAssignment {
-	private Student theStudent;
-	private Project theAssignment;
-	private Project actuallyLastAss;
+public class CandidateAssignment extends GsonSerialzable {
+	private Student student;
+	private Project assignedProject;
+
+	transient private Project lastAssignedProject;
 
 	/**
 	 */
 	public void randomizeAssignment() {
-		this.actuallyLastAss = this.theAssignment;
-		this.theAssignment = this.theStudent.getRandomPreference();
+		this.lastAssignedProject = this.assignedProject;
+		this.assignedProject = this.student.getRandomPreference();
+	}
+
+	// Deterministic Constructor
+	public CandidateAssignment(Student s, Project p) {
+		this.student = s;
+		this.assignedProject = p;
 	}
 
 	/**
 	 * @param poorGuy
 	 */
 	public CandidateAssignment(Student poorGuy) {
-		this.theStudent = poorGuy;
+		this.student = poorGuy;
 		randomizeAssignment();
 	}
 
@@ -30,22 +36,22 @@ public class CandidateAssignment {
 	 * @return
 	 */
 	public Student getStudentEntry(){
-		return this.theStudent;
+		return this.student;
 	}
 
 	/**
 	 *
 	 */
 	public void undoChange(){
-		if (this.actuallyLastAss!=null)
-		this.theAssignment = this.actuallyLastAss;
+		if (this.lastAssignedProject !=null)
+		this.assignedProject = this.lastAssignedProject;
 	}
 
 	/**
 	 * @return
 	 */
 	public Project getAssignedProject(){
-		return this.theAssignment;
+		return this.assignedProject;
 	}
 
 	/**
@@ -60,6 +66,10 @@ public class CandidateAssignment {
 	 * @return
 	 */
 	public Project getPrevAssignment() {
-		return this.actuallyLastAss;
+		return this.lastAssignedProject;
+	}
+
+	public String toJson() {
+		return GSON.toJson(this, CandidateAssignment.class);
 	}
 }

@@ -51,15 +51,17 @@ public class SimulatedAnnealingTest {
 
     @Test
     public void solve() throws Exception {
+        ((SimulatedAnnealing)SA).setIteration(1000);
+        ((SimulatedAnnealing)SA).setTimeout(10000);
         Result res = SA.Solve();
-        System.out.println(res.String());
+        System.out.println(res.getMeta());
         assertTrue(res!=null);
     }
 
     @Test
     public void unrelated() throws Exception {
         ImprovableCandidateSolution object = new ImprovableCandidateSolution
-                (data);
+                (data.StudentRepo().values());
         ImprovableCandidateSolution before = object;
         if (object.improve()) {
             ImprovableCandidateSolution after = object;

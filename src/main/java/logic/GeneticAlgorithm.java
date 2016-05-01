@@ -1,51 +1,73 @@
 package logic;
 
-import config.CullConfig;
 import config.EvolutionConfig;
 import data.GenePool;
+import model.DataSource;
 import model.GeneticCandidateSolution;
+import model.Student;
+import presentation.GAResult;
+import presentation.Result;
+
+import java.util.Collection;
 
 /**
  * GeneticAlgorithm:
  */
-public class GeneticAlgorithm {
-    private static final int max = 3000000;
-
-    private final GenePool<GeneticCandidateSolution> genepool;
-    private final CullConfig cullConfig;
+public class GeneticAlgorithm implements Solver{
+    private final GenePool<GeneticCandidateSolution> genePool;
     private final EvolutionConfig config;
     private Cullable cullImplementor;
-//    private final Combine combineImplementor;
-    private final Object combineConfig;
-    private final int killAmount = 5;
-    private final double probablityToKillGoodGuys = 0.2;
+    private Combinable combineImplementor;
+    private Collection<Student> src;
 
     public GeneticAlgorithm(EvolutionConfig cfg) {
-        this.genepool = new GenePool<GeneticCandidateSolution>();
-
-        this.cullConfig = new CullConfig(killAmount, probablityToKillGoodGuys);
-        // cullconfig
-        // injection
-        this.combineConfig = new Object();
+        this.genePool = new GenePool<>();
         this.config = cfg;
-        //TODO pull request some of the interface first please
         this.cullImplementor = new Cull();
-//        this.combineImplementor = new Combine(combineConfig, genepool);
+        this.combineImplementor = new Combine();
 
     }
 
     public GeneticCandidateSolution templateSolve() {
-        populationInitialSeeding();
-        for (int i = 0; i < config.evolutionStepMax; i++){
-            cullImplementor.cull(this.cullConfig, this.genepool);
-//            combineConfig.combine(this.combineConfig,this.genepool);
+        populationInitialSeeding(config.populationSize());
+        for (int i = 0; i < config.generationMax(); i++){
+            int beforecull = this.genePool.size();
+            cullImplementor.cull(config.cullConfig, this.genePool);
+            int afterCull = this.genePool.size();
+            combineImplementor.combine(config.combineConfig,this.genePool,
+                    config.cullConfig.getCullAmount());
+            int afterCombine = this.genePool.size();
+            if (afterCombine != beforecull) {
+                throw new IllegalStateException("The population is not " +
+                        "stable"+String.format(" before cull %d, before " +
+                        "combine %d, after combine %d",beforecull, afterCull,
+                        afterCombine));
+            }
         }
-        return this.genepool.getBest();
+        return this.genePool.getBest();
     }
 
     // do some initial step to stem up the population. thrive my minions, i
     // grant you 3 years of time to snag without natural predator
-    private void populationInitialSeeding() {
-        //TODO
+    private void populationInitialSeeding(int todo) {
+        while (this.genePool.size() < todo) {
+            this.genePool.addToPool(new GeneticCandidateSolution(src));
+        }
+        if (this.genePool.size() != config.populationSize()) {
+            throw new RuntimeException("population init failed to init the " +
+                    "required the size" + String.format(" gen %d, want %d",
+                    this.genePool.size(), config.populationSize()));
+        }
+    }
+
+    @Override
+    public void InjectData(DataSource repo) {
+        this.src = repo.StudentRepo().values();
+    }
+
+    @Override
+    public Result Solve() {
+        GeneticCandidateSolution rst = templateSolve();
+        return new GAResult(rst, config.generationMax());
     }
 }

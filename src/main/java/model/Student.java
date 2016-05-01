@@ -17,9 +17,9 @@ public class Student implements Dodgy {
      * <p>
      * this way all 3 requirements can be covered using 1 int variable.
      */
-    private int orderedPreferences;
-    private List<Project> projects;
-    private boolean hasPreassigned;
+    transient private int orderedPreferences;
+    transient private List<Project> projects;
+    transient private boolean hasPreassigned;
 
     public Student(String studentname) {
         this.Name = studentname;
@@ -48,13 +48,12 @@ public class Student implements Dodgy {
         }
     }
 
-    /** According to requirements there is no indication whether the orderedPreference has to include
-     * all subsequent projects or the original stated order. personally I think returning the entire
-     * project list would make more sense.
+    /** Now it's very clear that this method should only return the original
+     * preference listing.
      * @return entire project list
      */
     public List<Project> getOrderedPreferences() {
-        return this.projects;
+        return this.projects.subList(0,getNumberOfPreferences());
     }
 
     public String getStudentName() {
@@ -97,6 +96,8 @@ public class Student implements Dodgy {
         return projects.size();
     }
 
+    // get all projects, this implies inclusion of projects that are later
+    // added to the list by solution etc.
     public List<Project> getProjects() {
         return this.projects;
     }
