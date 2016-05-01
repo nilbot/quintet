@@ -71,7 +71,7 @@ public class Combine implements Combinable {
         return data;
     }
 
-    private GeneticCandidateSolution
+    protected GeneticCandidateSolution
     crossover(GeneticCandidateSolution father, GeneticCandidateSolution
             mother) {
         List<CandidateAssignment> lf = father.listOfAssignments();
@@ -86,7 +86,7 @@ public class Combine implements Combinable {
         GeneticCandidateSolution rst = new GeneticCandidateSolution(fh, mh);
         return rst;
     }
-    private GeneticCandidateSolution
+    protected GeneticCandidateSolution
     prioritise(GeneticCandidateSolution father, GeneticCandidateSolution
             mother) {
         return null;

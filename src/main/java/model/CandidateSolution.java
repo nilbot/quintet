@@ -11,7 +11,7 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
     private static final int penalty = 1000;
     private final Collection<Student> prefs;
     protected List<CandidateAssignment> theList;
-    private Set<Project> set;
+    protected Set<Project> set;
 
     // extremely dangerous, but
     // don't have time to redesign. so, whatever.

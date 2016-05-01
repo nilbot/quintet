@@ -24,9 +24,9 @@ public class Config {
     public Config(){}
 
     // TODO make this useful, maybe 3 params, 4?
-    public Config(String data, String dataSource, String solve){
+    public Config(String repoType, String dataSource, String solve){
         this.preset_input = dataSource;
-        this.dataSourceTypeConfig = DataSourceType.valueOf(data);
+        this.dataSourceTypeConfig = DataSourceType.valueOf(repoType);
         this.strategyTypeConfig = StrategyType.valueOf(solve);
     }
 
