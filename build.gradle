@@ -1,4 +1,4 @@
-group 'schubert'
+group 'net.nilbot'
 version '1.1.0'
 
 apply plugin: 'java'
@@ -20,4 +20,10 @@ dependencies {
 test {
     testLogging.showStandardStreams = true
     testLogging.exceptionFormat = 'full'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'app.ConsoleApp'
+    }
 }
