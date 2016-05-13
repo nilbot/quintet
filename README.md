@@ -4,6 +4,14 @@ Quintet
 ### CI by Codeship
 [![Codeship Status for master](https://www.codeship.io/projects/7e6bde90-aa98-0133-94fa-4a9cc2c4d260/status?branch=master)](https://codeship.com/projects/131067)
 
+## Note on running code
+### Choose running Main Class
+There are currently two main classes in the project. 
+* `ConsoleApp` for console IO
+* `WSApp` for interacting with layered web service [quintet-ui](https://github.com/nilbot/quintet-ui/).
+
+To select the main class you have to modify the `build.gradle` file to specify the main class.
+
 ## Develop
 
 * `git clone https://github.com/nilbot/quintet.git`
